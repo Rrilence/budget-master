@@ -45,7 +45,7 @@ const SignUp = () => {
             name="email" 
             id="email" 
             defaultValue={state.email}
-            placeholder='ivanov@mail.ru'
+            placeholder='mail@email.ru'
             required
             />
             <label htmlFor="password">Пароль:</label>

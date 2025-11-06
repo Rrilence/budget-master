@@ -18,7 +18,7 @@ const createUser = () => {
         if(typeof email === 'string' && !EMAIL_REGEXP.test(email)) {
             errors = {
                 ...errors,
-                error: 'Введите Email',
+                error: 'Введите адрес электронной почты (email) в виде mail@email.ru',
                 email,
             } 
         }

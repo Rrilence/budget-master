@@ -23,4 +23,14 @@ const notifySignUpError = () => {
     })
 } 
 
-export {notifySignUp, notifySignUpError}
+const notifyUpdatePasswordError = () => {
+    toast.error('Ошибка при обновлении пароля', {
+        toastId: '003',
+        position: "top-right",
+        autoClose: 1500,
+        closeOnClick: true,
+        theme: "light",
+    })
+} 
+
+export {notifySignUp, notifySignUpError, notifyUpdatePasswordError}

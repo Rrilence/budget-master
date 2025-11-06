@@ -1,5 +1,7 @@
 import React from "react";
 import type { ErrorBoundaryProps, ErrorBoundaryState } from "./types";
+import styles from './style.module.css'
+import clsx from "clsx";
 
 
 
@@ -29,7 +31,7 @@ class ErrorBoudary extends React.Component<ErrorBoundaryProps, ErrorBoundaryStat
     render(): React.ReactNode {
          if(this.state.hasError) {
              return (
-                <div>
+                <div className={clsx('container', styles.container)}>
                     <h2>При загрузке страницы возникли неполадки</h2>
                     <h3>Попробуйте перезагрузить страницу</h3>
                     <details style={{ whiteSpace: 'pre-wrap' }}>

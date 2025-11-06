@@ -7,8 +7,7 @@ import logo from '../../assets/logo.png'
 import { useSelector } from "react-redux"
 import { selectTheme } from "../../entities/Theme/theme-slice"
 import { useEffect, useState } from "react"
-import { supabase } from "../../entities/lib/supabase"
-import Sidebar from "../../entities/Sidebar/SideBar"
+import Sidebar from "../../entities/Sidebar/Sidebar"
 
 
 const Layout = () => {
@@ -22,20 +21,6 @@ const Layout = () => {
       setWindowWidth(window.innerWidth);
     };
     window.addEventListener('resize', handleResize);
-    }, [])
-
-    useEffect(() => {
-        const getCurrentUser = async () => {
-        const { data: sessionData } = await supabase.auth.getSession()
-
-        if (sessionData?.session) {
-            const { data } = await supabase.auth.getUser()
-            console.log(data.user?.user_metadata.login)
-        }
-
-        }
-
-        getCurrentUser()
     }, [])
 
     useEffect(() => {

@@ -1,12 +1,13 @@
 import { useDispatch, useSelector } from 'react-redux';
 import styles from './styles.module.css'
 import { selectSidebar } from '../Sidebar/sidebar-slice';
-import { setSignIn, setSignOut, setSignUp } from '../auth-slice';
+import { selectUser, setSignIn, setSignOut, setSignUp } from '../auth-slice';
 import { logoutUser } from './api';
 
 const SignOut = () => {
     const dispatch = useDispatch()
     const sidebar = useSelector(selectSidebar);
+    const user = useSelector(selectUser);
 
     const signOut = async () => {
         const result = await logoutUser()
@@ -26,7 +27,10 @@ const SignOut = () => {
         onClick={signOut}>
             <i className="fa fa-sign-out" aria-hidden="true"></i>
                     {sidebar &&
-                        <span className={styles.span}>Выход</span>
+                        <div className={styles.account}>
+                            <p>{user?.user_metadata.login}</p>
+                            <p>Выход</p>
+                        </div>
                     }
         </div>
     )
