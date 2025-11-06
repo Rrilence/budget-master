@@ -1,13 +1,14 @@
 import { useActionState } from 'react'
 import { createUser } from './api'
 import type { CreateActionState } from '../../shared/types'
-import { useDispatch } from 'react-redux'
-import { setSignIn, setSignUp } from '../auth-slice'
+import { useDispatch, useSelector } from 'react-redux'
+import { selectVisible, setIsVisible, setSignIn, setSignUp } from '../auth-slice'
 
 
 const SignUp = () => {
 
     const dispatch = useDispatch();
+    const isVisible = useSelector(selectVisible)
 
     const [state, submitAction, isPending] = useActionState(
         async (prevState: CreateActionState,
@@ -49,17 +50,23 @@ const SignUp = () => {
             required
             />
             <label htmlFor="password">Пароль:</label>
+            <div style={{ position: 'relative' }}>
             <input 
             className='input'
-            type="password" 
+            type={isVisible ? 'text' : 'password'}
             name="password" 
             defaultValue={state.password}
             id="password" 
             required/>
+            <button
+            onClick={() => dispatch(setIsVisible(!isVisible))}
+            className='is_visible'
+            ><i className={isVisible ? 'fas fa-eye-slash' : 'fas fa-eye'}></i></button>
+            </div>
             <label htmlFor="passwordRepeat"> Подтвердите пароль:</label>
             <input 
             className='input'
-            type="password" 
+            type="text" 
             name="passwordRepeat" 
             id="passwordRepeat" 
             required/>

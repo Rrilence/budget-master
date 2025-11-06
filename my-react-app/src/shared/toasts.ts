@@ -12,6 +12,16 @@ const notifySignUp = () => {
     })
 }
 
+const notifynewPassword = () => {
+    toast.success('Пароль успешно изменен', {
+        toastId: '001',
+        position: "top-right",
+        autoClose: 1500,
+        closeOnClick: true,
+        theme: "light",
+    })
+}
+
 
 const notifySignUpError = () => {
     toast.error('Ошибка при регистрации', {
@@ -33,4 +43,4 @@ const notifyUpdatePasswordError = () => {
     })
 } 
 
-export {notifySignUp, notifySignUpError, notifyUpdatePasswordError}
+export {notifySignUp, notifySignUpError, notifyUpdatePasswordError, notifynewPassword}

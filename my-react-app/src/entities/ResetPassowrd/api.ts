@@ -17,8 +17,8 @@ const inputEmail = () => {
                 }      
             } 
         const { data, error} = await supabase.auth.resetPasswordForEmail(email, {
-            redirectTo: `${window.location.origin}/update-password`
-            // redirectTo: 'http://localhost:5173/update-password/'
+            // redirectTo: `${window.location.origin}/update-password`
+            redirectTo: 'http://localhost:5173/update-password/'
         });
          if (error) {
             console.error('Ошибка при запросе сброса пароля:', error);

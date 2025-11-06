@@ -11,6 +11,7 @@ const initialState: AuthState = {
     signOut: true,
     resetPassword: false,
     newPassword: false,
+    isVisible: false,
     user: null,
     loading: true,
     error: null,
@@ -58,6 +59,9 @@ const authSlice = createSlice({
         setNewPassword: (state, action) => {
             state.newPassword = action.payload
         },
+        setIsVisible: (state, action) => {
+            state.isVisible = action.payload
+        },
         setUser: (state, action) => {
             state.user = action.payload
         },
@@ -80,7 +84,7 @@ const authSlice = createSlice({
     },
 })
 
-export const {setSignUp, setSignIn, setSignOut, setUser, setResetPassword, setNewPassword} = authSlice.actions
+export const {setSignUp, setSignIn, setSignOut, setUser, setResetPassword, setNewPassword, setIsVisible} = authSlice.actions
 export const authReducer = authSlice.reducer
 
 export const selectSignUp = (state: RootState) => state.auth.signUp
@@ -90,5 +94,6 @@ export const selectResetPassword = (state: RootState) => state.auth.resetPasswor
 export const selectNewPassword = (state: RootState) => state.auth.newPassword
 export const selectUser = (state: RootState) => state.auth.user
 export const selectLoading = (state: RootState) => state.auth.loading
+export const selectVisible = (state: RootState) => state.auth.isVisible
 
 export const useAppDispatch = () => useDispatch<AppDispatch>(); 

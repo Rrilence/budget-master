@@ -6,6 +6,7 @@ export type CreateActionState = {
     passwordRepeat?: string,
     login?: string,
     error?: string,
+    success?: boolean,
 }
 
 export interface AuthState {
@@ -14,6 +15,7 @@ export interface AuthState {
     signOut: boolean,
     resetPassword: boolean,
     newPassword: boolean,
+    isVisible: boolean,
     user: User | null,
     loading: boolean,
     error: string | null,

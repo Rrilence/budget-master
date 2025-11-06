@@ -47,11 +47,13 @@ const updateUserPassword = () => {
                 return {
                     password: '',
                     passwordRepeat: '',
+                    success: true,
                 }
             }
             return {
                     password: '',
                     passwordRepeat: '',
+                    success: true,
                 }
             
         } catch (error) {
@@ -60,6 +62,7 @@ const updateUserPassword = () => {
             return {...prevState,
                 password: '',
                 passwordRepeat: '',
+                error: 'Не удалось обновить пароль. Попробуйте еще раз.'
             }
         }
     }

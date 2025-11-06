@@ -2,14 +2,15 @@ import { useActionState } from "react"
 import { entrance } from "./api"
 import type { CreateActionState } from "../../shared/types"
 import { useDispatch, useSelector } from "react-redux"
-import { selectResetPassword, setResetPassword, setSignIn, setSignOut, setSignUp } from "../auth-slice"
+import { selectResetPassword, selectVisible, setIsVisible, setResetPassword, setSignIn, setSignOut, setSignUp } from "../auth-slice"
 
 import styles from './styles.module.css'
 import ResetPassword from "../ResetPassowrd/ResetPassword"
 
 const SignIn = () => {
     const dispatch = useDispatch();
-    const resetPassword = useSelector(selectResetPassword)
+    const resetPassword = useSelector(selectResetPassword);
+    const isVisible = useSelector(selectVisible);
 
     const [state, submitAction, isPending] = useActionState(
         async (prevState: CreateActionState,
@@ -57,13 +58,20 @@ const SignIn = () => {
                     required
                     />
                     <label htmlFor="password">Пароль:</label>
-                    <input 
-                    className='input'
-                    type="password" 
-                    name="password" 
-                    defaultValue={state.password}
-                    id="password" 
-                    required/>
+                    <div style={{ position: 'relative' }}>
+                        <input 
+                        className='input'
+                        type={isVisible ? 'text' : 'password'} 
+                        name="password" 
+                        defaultValue={state.password}
+                        id="password" 
+                        required/>
+                        <button
+                        onClick={() => dispatch(setIsVisible(!isVisible))}
+                        className='is_visible'
+                        ><i className={isVisible ? 'fas fa-eye-slash' : 'fas fa-eye'}></i>
+                        </button>
+                    </div>
                     <button 
                     className={styles.reset}
                     onClick={handlePassword}>Забыли пароль?</button>
