@@ -7,6 +7,8 @@ import { ThemeSwitcher } from "../Theme/ThemeSwither";
 import styles from './styles.module.css'
 import { selectSidebar, setShowBar } from "./sidebar-slice";
 import SignOut from "../SignOut/SignOut";
+import { AimOutlined, BarChartOutlined, CreditCardFilled, HomeFilled, QuestionCircleOutlined, SettingFilled, TransactionOutlined } from "@ant-design/icons";
+import { setActive } from "../headerMenu-slice";
 
 
 const Sidebar = () => {
@@ -22,18 +24,19 @@ const Sidebar = () => {
     return (
         <aside className={clsx(`${theme === 'light' ? 'theme-light' : 'theme-dark'}`)}>
             <div className={styles.wrapper}>
-                <div className={styles.icons}
+                <div className={styles.navlink}
                 onClick={showSidebar}>
-                    <i className="fa fa-home" aria-hidden="true"></i>
-                    <i className="fa fa-money" aria-hidden="true"></i>
-                    <i className="fa fa-arrows-h" aria-hidden="true"></i>
-                    <i className="fa fa-line-chart" aria-hidden="true"></i>
-                    <i className="fa fa-pencil-square-o" aria-hidden="true"></i>  
-                    <i className="fa fa-question-circle" aria-hidden="true"></i>
-                    <i className="fa fa-cogs" aria-hidden="true"></i>
+                    <HomeFilled className={styles.icon}/>
+                    <CreditCardFilled className={styles.icon}/>
+                    <TransactionOutlined className={styles.icon}/>
+                    <BarChartOutlined className={styles.icon}/>
+                    <AimOutlined className={styles.icon}/>  
+                    <QuestionCircleOutlined className={styles.icon}/>
+                    <SettingFilled className={styles.icon}/>
                 </div>
                 {sidebar && 
-                    <div className={styles.navlink}>
+                    <div className={styles.navlink}
+                    onClick={() => dispatch(setActive('Главная'))}>
                         <NavLink className={clsx(`${theme === 'light' ? 'theme-light' : 'theme-dark'}`, styles.link)} to='/dashboard'>Обзор</NavLink>
                         <NavLink className={clsx(`${theme === 'light' ? 'theme-light' : 'theme-dark'}`, styles.link)} to='/budget'>Бюджет</NavLink>
                         <NavLink className={clsx(`${theme === 'light' ? 'theme-light' : 'theme-dark'}`, styles.link)} to='/transactions'>Транзакции</NavLink>

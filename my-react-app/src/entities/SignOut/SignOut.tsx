@@ -25,7 +25,7 @@ const SignOut = () => {
     return (
         <div className={styles.sign_out}
         onClick={signOut}>
-            <i className="fa fa-sign-out" aria-hidden="true"></i>
+            <i className="fa fa-sign-out" aria-hidden="true" style={{fontSize: '1.2rem'}}></i>
                     {sidebar &&
                         <div className={styles.account}>
                             <p>{user?.user_metadata.login}</p>

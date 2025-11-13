@@ -4,6 +4,7 @@ import { inputEmail } from "./api";
 import { useDispatch, useSelector } from "react-redux";
 import { selectNewPassword, setNewPassword } from "../auth-slice";
 import styles from './styles.module.css'
+import { Button, Input } from "antd";
 
 const ResetPassword = () => {
     const dispatch = useDispatch()
@@ -35,7 +36,7 @@ const ResetPassword = () => {
             action={submitAction}
             autoComplete="off">
                 <label htmlFor="email">Введите Ваш Email:</label>
-                <input 
+                <Input 
                 className='input'
                 type="email" 
                 name="email" 
@@ -44,9 +45,10 @@ const ResetPassword = () => {
                 placeholder='mail@mail.ru'
                 required
                 />
-                <button
-                className='button'
-                type='submit'>Сбросить пароль</button>
+                <Button
+                style={{width: '150px', margin: '10px auto'}}
+                type='primary'
+                htmlType="submit">Сбросить пароль</Button>
                 {state!.error && <div>{state!.error}</div>}
             </form>
         }

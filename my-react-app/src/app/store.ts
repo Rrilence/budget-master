@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { themeReducer } from "../entities/Theme/theme-slice";
 import { authReducer } from "../entities/auth-slice";
 import { sidebarReducer } from "../entities/Sidebar/sidebar-slice";
+import { headerMenuReducer } from "../entities/headerMenu-slice";
 
 
 export const store = configureStore({
@@ -9,6 +10,7 @@ export const store = configureStore({
         theme: themeReducer,
         auth: authReducer,
         sidebar: sidebarReducer,
+        headerMenu: headerMenuReducer,
     },
     devTools: true
 })

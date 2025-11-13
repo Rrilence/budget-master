@@ -3,30 +3,23 @@
     flex-direction: row;
 }
 
-.icons {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    margin-left: 5px;
-}
-
 .navlink {
     display: flex;
     flex-direction: column;
     gap: 5px;
-    margin-left: 5px;
+    margin: 5px 5px 0;
 }
 
-i {
-    padding: 5px;
-    font-size: 1.1rem;
+.icon {
+    font-size: 20px;
+    padding: 5.5px;
 }
 
 .link {
     text-decoration: none;
     font-weight: bold;
     font-size: 15px;
-    padding: 5px;
+    padding: 5.5px;
     cursor: pointer;
 }
 
@@ -45,17 +38,15 @@ i {
     .wrapper {
         margin-top: 5px;
     }
-    .icons {
-        gap: 10px;
-    }
-
     .navlink {
+        margin-top: 15px;
         gap: 10px;
     }
     .link {
         font-size: 18px;
     }
-    i {
-        font-size: 1.3rem;
-    }
+    .icon {
+    font-size: 24px;
+    margin-left: 5px;
+}
 }

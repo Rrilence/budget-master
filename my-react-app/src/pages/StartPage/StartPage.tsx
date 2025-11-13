@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { selectSignIn, selectSignUp, setSignIn, setSignUp } from '../../entities/auth-slice'
 import SignIn from '../../entities/SignIn/SignIn'
 
+import { Button } from 'antd'
+
 const StartPage = () => {
     const dispatch = useDispatch();
     const signUp = useSelector(selectSignUp);
@@ -23,14 +25,20 @@ const StartPage = () => {
             <div className={styles.welcome}>
                 <h1>Добро пожаловать!</h1>
                 <h2>Вас приветсвует <br /> BUDGET MASTER</h2>
-                <p>Умный помощник учета вашего бюджета</p>
-                <div className={styles.buttons}>
-                    <button 
+                <p className={styles.p}>Умный помощник учета вашего бюджета</p>
+                <div>
+                    <Button 
+                    type="default"
+                    size='large'
+                    className={styles.button}
                     onClick={handleSignInClick}
-                    >Войти в свой профиль</button>
-                    <button 
+                    >Войти в свой профиль</Button>
+                    <Button 
+                    type="default"
+                    className={styles.button} 
+                    size='large' 
                     onClick={handleSignUpClick}
-                    >Зарегистрироваться</button>
+                    >Зарегистрироваться</Button>
                 </div>
             </div>
         }

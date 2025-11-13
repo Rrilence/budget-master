@@ -7,22 +7,16 @@
     width: 400px;
     margin: 200px auto;
     text-align: center;
-    color: rgb(10, 57, 99);
+    color: #030852;
 }
 
-p {
+.p {
     font-size: 1.3rem;
-    margin-bottom: 30px;
+    margin-bottom: 15px;
 }
 
-button {
+.button {
     width: 230px;
-    padding: 8px;
-    font-size: 1.1rem;
-    background-color: rgb(158, 201, 234);
-    border: 3px solid #ffff;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: bolder;
+    font-size: 18px !important;
     margin-bottom: 10px;
 }

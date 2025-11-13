@@ -6,6 +6,7 @@ import { getCurrentUser, selectLoading, selectUser, setUser, useAppDispatch } fr
 import { useSelector } from "react-redux"
 import { useEffect } from "react"
 import { supabase } from "../entities/lib/supabase"
+import AntProvider from "./ConfigProvider"
 
 
 function App() {
@@ -40,7 +41,9 @@ function App() {
     <BrowserRouter>
       <ToastContainer/>
         <ErrorBoudary>
-          <AppRouter/>
+          <AntProvider>
+            <AppRouter/>  
+          </AntProvider>
         </ErrorBoudary>
     </BrowserRouter>
   )

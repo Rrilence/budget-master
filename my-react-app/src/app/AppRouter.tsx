@@ -1,5 +1,4 @@
 import { Navigate, Outlet, Route, Routes} from "react-router-dom";
-import Layout from "../widgets/Layout/Layout";
 import StartPage from "../pages/StartPage/StartPage";
 import UpdatePassword from "../entities/UpdatePassword/UpdatePassword"
 import DashBoard from "../pages/Dashboard/ui/Dashboard";
@@ -12,6 +11,7 @@ import Settings from "../pages/Settings/ui/Settings";
 import { useSelector } from "react-redux";
 import type { PrivateRouteProps } from "../shared/types";
 import { selectUser } from "../entities/auth-slice";
+import LayoutWidget from "../widgets/Layout/Layout";
 
 const PrivateRoute = ({ redirectTo}: PrivateRouteProps) => {
     const user = useSelector(selectUser);
@@ -24,7 +24,7 @@ export const AppRouter = () => {
         <Routes>
             <Route path="/welcome" index element={<StartPage/>}/>
                 <Route element={<PrivateRoute redirectTo="/welcome" />}>
-                    <Route path="/" element={<Layout/>}>
+                    <Route path="/" element={<LayoutWidget/>}>
                     <Route path="/dashboard" element={<DashBoard/>}/>
                     <Route path="/budget" element={<Budget/>}/>
                     <Route path="/transactions" element={<Transactions/>}/>

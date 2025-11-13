@@ -2,15 +2,18 @@ import { useActionState } from "react"
 import { entrance } from "./api"
 import type { CreateActionState } from "../../shared/types"
 import { useDispatch, useSelector } from "react-redux"
-import { selectResetPassword, selectVisible, setIsVisible, setResetPassword, setSignIn, setSignOut, setSignUp } from "../auth-slice"
+import { selectResetPassword, setResetPassword, setSignIn, setSignOut, setSignUp } from "../auth-slice"
 
 import styles from './styles.module.css'
 import ResetPassword from "../ResetPassowrd/ResetPassword"
 
+import { Button, Input } from "antd"
+import { LogoutOutlined } from "@ant-design/icons"
+
 const SignIn = () => {
+
     const dispatch = useDispatch();
     const resetPassword = useSelector(selectResetPassword);
-    const isVisible = useSelector(selectVisible);
 
     const [state, submitAction, isPending] = useActionState(
         async (prevState: CreateActionState,
@@ -39,8 +42,11 @@ const SignIn = () => {
         dispatch(setResetPassword(true))
     }
 
+    const handlenavigate = () => window.location.href = '/';
+
     return (
         <>
+        <Button shape="circle" icon={<LogoutOutlined rotate={180}/>} onClick={handlenavigate} style={{margin: '10px 0 0 10px'}}/>
             {!resetPassword && 
                 <form 
                 className='form'
@@ -48,7 +54,7 @@ const SignIn = () => {
                 autoComplete="off">
                     <h1 className='title'>Вход</h1>
                     <label htmlFor="email">Email:</label>
-                    <input 
+                    <Input 
                     className='input'
                     type="email" 
                     name="email" 
@@ -58,27 +64,19 @@ const SignIn = () => {
                     required
                     />
                     <label htmlFor="password">Пароль:</label>
-                    <div style={{ position: 'relative' }}>
-                        <input 
-                        className='input'
-                        type={isVisible ? 'text' : 'password'} 
-                        name="password" 
-                        defaultValue={state.password}
-                        id="password" 
-                        required/>
-                        <button
-                        onClick={() => dispatch(setIsVisible(!isVisible))}
-                        className='is_visible'
-                        ><i className={isVisible ? 'fas fa-eye-slash' : 'fas fa-eye'}></i>
-                        </button>
-                    </div>
+                    <Input.Password
+                    name="password" 
+                    defaultValue={state.password}
+                    id="password" 
+                    required/>
                     <button 
                     className={styles.reset}
                     onClick={handlePassword}>Забыли пароль?</button>
-                    <button
-                    className='button'
-                    type='submit'
-                    disabled={isPending}>Войти</button>
+                    <Button
+                    type="primary"
+                    htmlType="submit"
+                    style={{width: '150px', margin: '0 auto'}}
+                    disabled={isPending}>Войти</Button>
                     {state!.error && <div>{state!.error}</div>}
                 </form>
             }

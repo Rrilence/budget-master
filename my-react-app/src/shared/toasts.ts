@@ -43,4 +43,43 @@ const notifyUpdatePasswordError = () => {
     })
 } 
 
-export {notifySignUp, notifySignUpError, notifyUpdatePasswordError, notifynewPassword}
+const notifyName = () => {
+    toast.warn('Введите название на русском языке', {
+        toastId: '002',
+        position: "top-right",
+        autoClose: 1500,
+        closeOnClick: true,
+        theme: "light",
+    })
+}
+
+const notifyWeatherCity = () => {
+    toast.error('Неизвестный город', {
+        toastId: '003',
+        position: "top-right",
+        autoClose: 1500,
+        closeOnClick: true,
+        theme: "light",
+    })
+} 
+
+const notifyGeolocation = () => {
+    toast.error('Неудалось определить вашу геолокацию', {
+        toastId: '003',
+        position: "top-right",
+        autoClose: 1500,
+        closeOnClick: true,
+        theme: "light",
+    })
+} 
+
+export {
+    notifySignUp, 
+    notifySignUpError, 
+    notifyUpdatePasswordError, 
+    notifynewPassword, 
+    notifyName,
+    notifyGeolocation,
+    notifyWeatherCity,
+    
+}

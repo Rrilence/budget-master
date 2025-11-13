@@ -1,6 +1,6 @@
 
 .sign_out {
-    margin-left: 6px;
+    margin: 10px 0 10px 15px;
     display: flex;
     cursor: pointer;
 }
@@ -8,7 +8,7 @@
 .account {
     position: relative;
     margin-left: 10px;
-    bottom: 3px;
+    bottom: 5px;
     font-size: 14px;
 }
 
@@ -20,8 +20,14 @@
  
  
 @media (min-width: 720px) {
+    .sign_out {
+        margin-left: 22px;
+    }
     .span {
         font-size: 16px;
         font-weight: 300;
+    }
+    .account {
+        margin-left: 14px;
     }
  }

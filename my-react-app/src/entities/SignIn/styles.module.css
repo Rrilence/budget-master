@@ -4,7 +4,7 @@
     border-radius: 0;
     font-weight: 300;
     width: fit-content;
-    margin: 15px auto 0;
+    margin: 15px auto 5px;
     cursor: pointer;
     padding-bottom: 2px;
     border-bottom: 2px solid rgba(000, 000, 000, 0);

@@ -1,14 +1,14 @@
 import { useActionState } from "react"
-import { useDispatch, useSelector} from "react-redux";
-import { selectVisible, setIsVisible, setNewPassword } from "../auth-slice";
+import { useDispatch } from "react-redux";
+import { setNewPassword } from "../auth-slice";
 import type { CreateActionState } from "../../shared/types";
 import { updateUserPassword } from "./api";
 import { notifynewPassword } from "../../shared/toasts";
+import { Button, Input } from "antd";
 
 const UpdatePassword = () => {
 
     const dispatch = useDispatch();
-    const isVisible = useSelector(selectVisible)
 
     const [state, submitAction, isPending] = useActionState(
         async (prevState: CreateActionState,
@@ -40,31 +40,22 @@ const UpdatePassword = () => {
             autoComplete="off">
                 <h1 className='title'>Придумайте новый пароль:</h1>
                 <label htmlFor="password">Новый пароль:</label>
-                <div style={{ position: 'relative' }}>
-                    <input 
-                    className='input'
-                    type={isVisible ? 'text' : 'password'}  
-                    name="password" 
-                    defaultValue={state.password}
-                    id="password" 
-                    required/>
-                    <button
-                    onClick={() => dispatch(setIsVisible(!isVisible))}
-                    className='is_visible'
-                    ><i className={isVisible ? 'fas fa-eye-slash' : 'fas fa-eye'}></i>
-                    </button>
-                </div>
+                <Input.Password 
+                name="password" 
+                defaultValue={state.password}
+                id="password" 
+                required/>
                 <label htmlFor="passwordRepeat"> Подтвердите пароль:</label>
-                <input 
-                className='input'
+                <Input 
                 type="text" 
                 name="passwordRepeat" 
                 id="passwordRepeat" 
                 required/>
-                <button
-                className='button'
-                type='submit'
-                disabled={isPending}>Обновить пароль</button>
+                <Button
+                type='primary'
+                htmlType="submit"
+                style={{width: '150px', margin: '10px auto'}}
+                disabled={isPending}>Обновить пароль</Button>
                 {state!.error && <div>{state!.error}</div>}
             </form>
         </>
