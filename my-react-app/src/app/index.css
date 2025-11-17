@@ -99,6 +99,14 @@ aside {
     inset-inline: 4px !important;
 }
 
+.ant-segmented-group {
+    justify-content: space-around;
+}
+
+.ant-table-cell {
+    padding: 6px !important; 
+}
+
 
 @media (min-width: 500px) {
     .form {

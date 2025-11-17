@@ -1,6 +1,10 @@
 import { ConfigProvider, theme} from "antd";
 import { useSelector } from "react-redux";
 import { selectTheme } from "../entities/Theme/theme-slice";
+import locale from 'antd/locale/ru_RU';
+import dayjs from 'dayjs';
+
+dayjs.locale('ruRU');
 
 interface AntProps {
     children: React.ReactNode
@@ -12,8 +16,7 @@ const AntProvider = ({children}: AntProps) => {
     const isTheme = useSelector(selectTheme);
 
     return (
-
-        <ConfigProvider
+        <ConfigProvider locale={locale}
             theme = {{
                 token: {
                     fontSize: 15,
