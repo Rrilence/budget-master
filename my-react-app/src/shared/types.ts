@@ -82,8 +82,32 @@ export interface Valute {
 }
 
 export interface InfoCourse {
-    key: string;
-    code: string;
-    name: string;
-    value: number;
+  key: string;
+  code: string;
+  name: string;
+  value: number;
+}
+
+export type InfoExpense = {
+  id?: string | undefined,
+  user_id?: string | null | undefined,
+  name: string,
+  category: string,
+  amount: number,
+  date: string,
+  error?: string | null,
+}
+
+export interface ExpensesState {
+  isModalOpen: boolean,
+  expenses: InfoExpense[],
+  
+}
+
+export interface ExpensesList {
+  key: React.Key;
+  category: string;
+  name: string;
+  amount: number;
+  date: string;
 }

@@ -11,7 +11,7 @@ const entrance = () => {
         const password = formData.get('password') as string;
 
         if(typeof email === 'string' && !EMAIL_REGEXP.test(email)) {
-               return {
+            return {
                 error: 'Введите адрес электронной почты (email) в виде mail@email.ru',
                 email,
                }

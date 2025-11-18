@@ -17,8 +17,6 @@ import Exchange from "../Exchange/ui/Exchange"
 
 const { Header, Content, Sider } = Layout;
 
-
-
 const LayoutWidget = () => {
     const dispatch = useDispatch(); 
     const theme = useSelector(selectTheme);

@@ -32,8 +32,7 @@ const createUser = () => {
             } 
         }
         
-        if(typeof passwordRepeat === 'string' && passwordRepeat !== password) {
-            console.log('пароли не совпадают');
+        if(typeof passwordRepeat === 'string' && passwordRepeat != password) {
             errors = {
                 ...errors,
                 error: 'Пароли не совпадают',

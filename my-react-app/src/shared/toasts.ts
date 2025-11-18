@@ -83,6 +83,36 @@ const notifyGeolocation = () => {
     })
 } 
 
+const notifyCreateExpense = () => {
+    toast.success('Статья расходов добавлена', {
+        toastId: '003',
+        position: "top-right",
+        autoClose: 1500,
+        closeOnClick: true,
+        theme: "light",
+    })
+} 
+
+const notifyNameExpense = () => {
+    toast.success('Введите название на русском языке', {
+        toastId: '003',
+        position: "top-right",
+        autoClose: 1500,
+        closeOnClick: true,
+        theme: "light",
+    })
+} 
+
+const notifyErrorExpenses = () => {
+    toast.error('Ошибка при загрузке данных расходов', {
+        toastId: '003',
+        position: "top-right",
+        autoClose: 1500,
+        closeOnClick: true,
+        theme: "light",
+    })
+} 
+
 export {
     notifySignUp, 
     notifySignUpError, 
@@ -91,6 +121,8 @@ export {
     notifyName,
     notifyGeolocation,
     notifyWeatherCity,
+    notifyCreateExpense,
+    notifyErrorExpenses,
+    notifyNameExpense,
     notifySignInError,
-    
 }

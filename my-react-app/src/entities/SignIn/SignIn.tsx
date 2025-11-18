@@ -28,10 +28,10 @@ const SignIn = () => {
                dispatch(setSignUp(false));
                dispatch(setSignOut(false));
                window.location.href = '/';
-           return {
-               email: '',
-               password: ''
-           }
+            return {
+                email: '',
+                password: ''
+            }
         }
         }
         , {
