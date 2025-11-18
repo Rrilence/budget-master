@@ -33,7 +33,6 @@ const createUser = () => {
         }
         
         if(typeof passwordRepeat === 'string' && passwordRepeat != password) {
-            console.log('пароли не совпадают');
             errors = {
                 ...errors,
                 error: 'Пароли не совпадают',
@@ -52,7 +51,18 @@ const createUser = () => {
                 passwordRepeat,
                 login: '',
             } 
-        } else login = login[0].toUpperCase() + login.slice(1)
+        } else if (login.trim().length > 0) {
+            login = login[0].toUpperCase() + login.slice(1)
+        } else {
+            errors = {
+                ...errors,
+                error: 'Имя пользователя не может быть пустым',
+                email,
+                password,
+                passwordRepeat,
+                login: '',
+            } 
+        }
 
         if (Object.keys(errors).length > 0) {
             return {

@@ -8,32 +8,22 @@ const entrance = () => {
         prevState: CreateActionState,
         formData: FormData,
     ): Promise<CreateActionState> => {
-        let errors: CreateActionState = {}
         const email = formData.get('email') as string;
         const password = formData.get('password') as string;
 
         if(typeof email === 'string' && !EMAIL_REGEXP.test(email)) {
-            errors = {
-                ...errors,
+            return {
                 error: 'Введите адрес электронной почты (email) в виде mail@email.ru',
                 email,
             } 
         }
 
         if(typeof password === 'string' && password.length < 8) {
-            errors = {
-                ...errors,
+            return {
                 error: 'Пароль должен содержать не менее 8 символов',
                 email,
                 password: prevState.password,
             } 
-        }
-
-        if (Object.keys(errors).length > 0) {
-            return {
-                ...prevState,
-                ...errors,
-            };
         }
 
         try {
@@ -43,9 +33,8 @@ const entrance = () => {
             }) 
             if (error) throw error
             if(data) {
-                console.log(data.user);
-                
                 return {
+                    ...prevState,
                     email: '',
                     password: ''
                 }
@@ -55,13 +44,13 @@ const entrance = () => {
             console.error('Ошибка при входе', error);
             return {...prevState,
                 email: email || '',
-                password: ''
+                password: '',
+                error: (error as Error).message
             }
         }
         return {...prevState,
                 email: email || '',
                 password: '',
-                error: undefined,
             }
     }
 }

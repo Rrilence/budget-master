@@ -9,6 +9,7 @@ import ResetPassword from "../ResetPassowrd/ResetPassword"
 
 import { Button, Input } from "antd"
 import { LogoutOutlined } from "@ant-design/icons"
+import { notifySignInError } from "../../shared/toasts"
 
 const SignIn = () => {
 
@@ -21,16 +22,17 @@ const SignIn = () => {
         const result = await entrance()(prevState, formData)
 
         if(result && result.error) {
+            notifySignInError();
             return result
-        }
-        dispatch(setSignIn(false));
-        dispatch(setSignUp(false));
-        dispatch(setSignOut(false));
-        window.location.href = '/';
-
-        return {
-            email: '',
-            password: ''
+        } else {
+            dispatch(setSignIn(false));
+               dispatch(setSignUp(false));
+               dispatch(setSignOut(false));
+               window.location.href = '/';
+            return {
+                email: '',
+                password: ''
+            }
         }
         }
         , {
@@ -75,9 +77,9 @@ const SignIn = () => {
                     <Button
                     type="primary"
                     htmlType="submit"
-                    style={{width: '150px', margin: '0 auto'}}
+                    style={{width: '150px', margin: '0 auto 10px'}}
                     disabled={isPending}>Войти</Button>
-                    {state!.error && <div>{state!.error}</div>}
+                    {state!.error && <div style={{color: 'red'}}>Пользователь не зарегистрирован</div>}
                 </form>
             }
             {resetPassword && <ResetPassword/>}

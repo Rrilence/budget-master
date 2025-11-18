@@ -77,7 +77,7 @@ const SignUp = () => {
                 type='primary'
                 htmlType="submit"
                 disabled={isPending}>Зарегистрироваться</Button>
-                {state!.error && <div>{state!.error}</div>}
+                {state!.error && <div style={{color: 'red'}}>{state!.error}</div>}
             </form>
         </>
     )

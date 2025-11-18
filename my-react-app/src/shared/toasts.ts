@@ -33,6 +33,16 @@ const notifySignUpError = () => {
     })
 } 
 
+const notifySignInError = () => {
+    toast.error('Пользователь не зарегистрирован', {
+        toastId: '003',
+        position: "top-right",
+        autoClose: 1500,
+        closeOnClick: true,
+        theme: "light",
+    })
+} 
+
 const notifyUpdatePasswordError = () => {
     toast.error('Ошибка при обновлении пароля', {
         toastId: '003',
@@ -114,5 +124,5 @@ export {
     notifyCreateExpense,
     notifyErrorExpenses,
     notifyNameExpense,
-    
+    notifySignInError,
 }
