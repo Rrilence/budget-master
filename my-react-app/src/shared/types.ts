@@ -1,7 +1,7 @@
 import type { User } from "@supabase/supabase-js";
 
 export type CreateActionState = {
-    email?: string,
+    email: string,
     password?: string,
     passwordRepeat?: string,
     login?: string,

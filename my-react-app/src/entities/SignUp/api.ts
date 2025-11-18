@@ -9,7 +9,7 @@ const createUser = () => {
         prevState: CreateActionState,
         formData: FormData,
     ): Promise<CreateActionState> => {
-        let errors: CreateActionState = {}
+        let errors = {}
         const email = formData.get('email') as string;
         const password = formData.get('password') as string;
         const passwordRepeat = formData.get('passwordRepeat') as string;
@@ -32,7 +32,7 @@ const createUser = () => {
             } 
         }
         
-        if(typeof passwordRepeat === 'string' && passwordRepeat != password) {
+        if(typeof passwordRepeat === 'string' && passwordRepeat !== password) {
             console.log('пароли не совпадают');
             errors = {
                 ...errors,
@@ -52,7 +52,18 @@ const createUser = () => {
                 passwordRepeat,
                 login: '',
             } 
-        } else login = login[0].toUpperCase() + login.slice(1)
+        } else if (login.trim().length > 0) {
+            login = login[0].toUpperCase() + login.slice(1)
+        } else {
+            errors = {
+                ...errors,
+                error: 'Имя пользователя не может быть пустым',
+                email,
+                password,
+                passwordRepeat,
+                login: '',
+            } 
+        }
 
         if (Object.keys(errors).length > 0) {
             return {
