@@ -2,7 +2,7 @@ import axios from "axios";
 import type { Valute, ValuteItem } from "../../shared/types";
 import { formatDateExchange } from "../../shared/formatting";
 
-export const defaultState: Valute = {
+export const defaultExchange: Valute = {
     data: [],
     dateExchange: '',
     error: null,
@@ -14,6 +14,8 @@ export async function submitCourse(_prevState: Valute): Promise<Valute> {
         .get('https://www.cbr-xml-daily.ru/daily_json.js')
         const date = formatDateExchange(res.data.Date);
         const courseData: ValuteItem[] = Object.values(res.data.Valute)
+        console.log(courseData);
+        
         return {data: courseData, dateExchange: date, error: null}
     } catch (error) {
         console.error("Ошибка при получении данных Курса Валют", error);

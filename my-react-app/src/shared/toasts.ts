@@ -33,8 +33,18 @@ const notifySignUpError = () => {
     })
 } 
 
+const notifySignUpError2 = () => {
+    toast.error('Пользователь с таким email уже зарегистрирован', {
+        toastId: '003',
+        position: "top-right",
+        autoClose: 1500,
+        closeOnClick: true,
+        theme: "light",
+    })
+} 
+
 const notifySignInError = () => {
-    toast.error('Пользователь не зарегистрирован', {
+    toast.error('Ошибка входа', {
         toastId: '003',
         position: "top-right",
         autoClose: 1500,
@@ -93,6 +103,16 @@ const notifyCreateExpense = () => {
     })
 } 
 
+const notifyCreateErrorExpense = () => {
+    toast.error('Ошибка, статья расходов не добавлена', {
+        toastId: '003',
+        position: "top-right",
+        autoClose: 1500,
+        closeOnClick: true,
+        theme: "light",
+    })
+} 
+
 const notifyNameExpense = () => {
     toast.success('Введите название на русском языке', {
         toastId: '003',
@@ -125,4 +145,7 @@ export {
     notifyErrorExpenses,
     notifyNameExpense,
     notifySignInError,
+    notifyCreateErrorExpense,
+    notifySignUpError2,
+    
 }

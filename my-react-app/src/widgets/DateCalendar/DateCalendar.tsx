@@ -8,7 +8,7 @@ import styles from './styles.module.css'
 
 dayjs.locale('ru');
 
-const Date = () => {
+const DateCalendar = () => {
     const onPanelChange = (value: Dayjs, mode: CalendarProps<Dayjs>['mode']) => {
     console.log(value.format('YYYY-MM-DD'), mode);
     };
@@ -23,4 +23,4 @@ const Date = () => {
 
 }
 
-export default Date
+export default DateCalendar

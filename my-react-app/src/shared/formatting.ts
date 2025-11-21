@@ -1,6 +1,5 @@
 const formatDateWeather = (date: Date) => {
     const options: Intl.DateTimeFormatOptions = {
-        year: 'numeric',
         month: 'long',
         day: '2-digit',
     }

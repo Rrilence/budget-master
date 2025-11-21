@@ -14,6 +14,9 @@
     align-items: center;
 }
 
+.imgWeather {
+    display: none;
+}
 
 .img {
     position: absolute;
@@ -46,10 +49,6 @@
         margin-left: 45px;
     }
 
-    .link {
-        font-size: 20px;
-    }
-
     .logo {
         display: block;
     }
@@ -68,6 +67,11 @@
         height: 80px;
         top: 6px;
         left: 5px;
+    }
+
+    .imgWeather {
+        display: inline-block;
+        width: 40px;
     }
 
     .budget {

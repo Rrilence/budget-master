@@ -2,40 +2,42 @@ import { ToastContainer } from "react-toastify"
 import { AppRouter } from "./AppRouter"
 import ErrorBoudary from "../widgets/errorBoundary/ErrorBoundary"
 import { BrowserRouter } from "react-router-dom"
-import { getCurrentUser, selectLoading, selectUser, setUser, useAppDispatch } from "../entities/auth-slice"
+import { getCurrentUser, selectLoading, setUser, useAppDispatch } from "../entities/auth-slice"
 import { useSelector } from "react-redux"
 import { useEffect } from "react"
 import { supabase } from "../entities/lib/supabase"
 import AntProvider from "./ConfigProvider"
+import { Flex, Spin } from "antd"
 
 
 function App() {
   const dispatch = useAppDispatch();
   const loading = useSelector(selectLoading);
-  const user = useSelector(selectUser)
 
   useEffect(() => {
-    dispatch(getCurrentUser());
-    const { data : authListener } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        console.log(`Auth event: ${event}`);
-          if(session?.user) {
-              dispatch(setUser(session.user))
-          } else {
-            dispatch(setUser(null))
+    const fetchData = async () => {
+      dispatch(getCurrentUser());
+      const { data : authListener } = supabase.auth.onAuthStateChange(
+        async (event, session) => {
+          console.log(`Auth event: ${event}`);
+            if(session?.user) {
+                dispatch(setUser(session.user))                
+            } else {
+              dispatch(setUser(null))
+            }
           }
-        }
-    )
-    console.log(user);
-    
-    return () => {
-      authListener?.subscription?.unsubscribe()
-    }   
+      )
+      return () => {
+        authListener?.subscription?.unsubscribe()
+      }   
+    }
+    fetchData();
   }, [dispatch])
   
-  if(loading) {
-    return <p>Загрузка...</p>
-  }
+   if (loading) {
+    return <Flex gap="middle" justify="center">
+        <Spin tip="Loading" size="large"><div style={{padding: 50}}/></Spin>
+    </Flex>; }
 
   return (
     <BrowserRouter>

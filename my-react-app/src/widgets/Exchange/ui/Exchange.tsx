@@ -1,6 +1,6 @@
 import { startTransition, useActionState, useEffect, useRef, useState, type Key } from "react"
 import { Button, Input, Space, Table, type InputRef, type TableColumnType } from "antd"
-import { defaultState, submitCourse } from "../api"
+import { defaultExchange, submitCourse } from "../api"
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from "@ant-design/icons";
 import type { FilterDropdownProps } from "antd/es/table/interface";
@@ -14,7 +14,7 @@ const Exchange = () => {
     const [searchedColumn, setSearchedColumn] = useState('');
     const searchInput = useRef<InputRef>(null);
 
-    const [courseState, dispatch] = useActionState(submitCourse, defaultState)
+    const [courseState, dispatch] = useActionState(submitCourse, defaultExchange)
     
     const dataSource = courseState.data.map((item) => (
         {

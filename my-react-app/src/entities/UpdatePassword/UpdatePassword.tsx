@@ -1,10 +1,12 @@
-import { useActionState } from "react"
+import { startTransition, useActionState } from "react"
 import { useDispatch } from "react-redux";
 import { setNewPassword } from "../auth-slice";
 import type { CreateActionState } from "../../shared/types";
 import { updateUserPassword } from "./api";
 import { notifynewPassword } from "../../shared/toasts";
-import { Button, Input } from "antd";
+import { Button, Form, Input, Typography } from "antd";
+import type { FormProps } from "antd/lib";
+const { Title } = Typography;
 
 const UpdatePassword = () => {
 
@@ -12,8 +14,8 @@ const UpdatePassword = () => {
 
     const [state, submitAction, isPending] = useActionState(
         async (prevState: CreateActionState,
-                formData: FormData,) => {
-        const result = await updateUserPassword()(prevState, formData)
+                values: CreateActionState,) => {
+        const result = await updateUserPassword()(prevState, values)
 
          if(result && result.error) {
                 return result
@@ -32,33 +34,46 @@ const UpdatePassword = () => {
         }, {
     })
 
+    const onFinish: FormProps<CreateActionState>['onFinish'] = (values) => {
+        startTransition(() => {
+            submitAction(values);
+        });
+     };
+
+
     return (
-        <>
-            <form 
+            <Form 
             className='form'
-            action={submitAction}
-            autoComplete="off">
-                <h1 className='title'>Придумайте новый пароль:</h1>
-                <label htmlFor="password">Новый пароль:</label>
-                <Input.Password 
-                name="password" 
-                defaultValue={state.password}
-                id="password" 
-                required/>
-                <label htmlFor="passwordRepeat"> Подтвердите пароль:</label>
-                <Input 
-                type="text" 
-                name="passwordRepeat" 
-                id="passwordRepeat" 
-                required/>
+            autoComplete="off"
+            onFinish={onFinish}>
+                <Title level={4} style={{textAlign: 'center'}}>Придумайте новый пароль:</Title>
+                <Form.Item 
+                    layout="vertical" 
+                    label="Новый пароль:" 
+                    name="password" 
+                    rules={[{ required: true},
+                        {min: 8, message: 'Пароль должен содержать не менее 8 символов!'}
+                    ]} 
+                    initialValue={state.password}
+                    style={{marginBottom: 10}} >
+                    <Input.Password/>
+                </Form.Item>
+                <Form.Item 
+                    layout="vertical" 
+                    label="Подтвердите пароль:" 
+                    name="passwordRepeat" 
+                    rules={[{ required: true}]} 
+                    initialValue={state.password}
+                    style={{marginBottom: 10}} >
+                    <Input/>
+                </Form.Item>
                 <Button
                 type='primary'
                 htmlType="submit"
                 style={{width: '150px', margin: '10px auto'}}
                 disabled={isPending}>Обновить пароль</Button>
-                {state!.error && <div>{state!.error}</div>}
-            </form>
-        </>
+                {state!.error && <div style={{color: 'red', fontSize: '0.9rem'}}>{state!.error}</div>}
+            </Form>
     )
 }
 

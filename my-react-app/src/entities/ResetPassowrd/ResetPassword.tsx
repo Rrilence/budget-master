@@ -1,19 +1,21 @@
-import { useActionState } from "react";
+import { startTransition, useActionState } from "react";
 import type { CreateActionState } from "../../shared/types";
 import { inputEmail } from "./api";
 import { useDispatch, useSelector } from "react-redux";
 import { selectNewPassword, setNewPassword } from "../auth-slice";
 import styles from './styles.module.css'
-import { Button, Input } from "antd";
+import { Button, Form, Input } from "antd";
+import type { FormProps } from "antd/lib";
 
 const ResetPassword = () => {
+    const [form] = Form.useForm();
     const dispatch = useDispatch()
     const newPassword = useSelector(selectNewPassword)
 
     const [state, submitAction] = useActionState(
         async (prevState: CreateActionState,
-                formData: FormData): Promise<CreateActionState> => {
-        const result = await inputEmail()(prevState, formData)
+                values: CreateActionState): Promise<CreateActionState> => {
+        const result = await inputEmail()(prevState, values)
 
          if(result === true) {
                     dispatch(setNewPassword(true));
@@ -28,29 +30,37 @@ const ResetPassword = () => {
         }, {email: '',}
     )
 
+    const onFinish: FormProps<CreateActionState>['onFinish'] = (values) => {
+                startTransition(() => {
+                    submitAction(values);
+                });
+            form.resetFields();
+        };
+
        return (
         <>
         {!newPassword &&
-            <form 
+            <Form 
+            form={form}
             className='form'
-            action={submitAction}
+            onFinish={onFinish}
             autoComplete="off">
-                <label htmlFor="email">Введите Ваш Email:</label>
-                <Input 
-                className='input'
-                type="email" 
+                <Form.Item
+                layout="vertical" 
+                label="Введите Ваш Email:" 
                 name="email" 
-                id="email" 
-                defaultValue={state.email}
-                placeholder='mail@mail.ru'
-                required
-                />
+                rules={[{ required: true},
+                        {type: 'email', message: 'Введите адрес электронной почты (email) в виде mail@email.ru'}
+                    ]} 
+                >
+                    <Input placeholder='mail@mail.ru'/>
+                </Form.Item>
                 <Button
-                style={{width: '150px', margin: '10px auto'}}
+                style={{width: '150px', margin: '0 auto'}}
                 type='primary'
                 htmlType="submit">Сбросить пароль</Button>
                 {state!.error && <div>{state!.error}</div>}
-            </form>
+            </Form>
         }
         {newPassword && <div className={styles.checkEmail}>Ссылка для сброса пароля отправлена на Ваш email</div>}
         </>

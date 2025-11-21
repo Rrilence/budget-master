@@ -1,7 +1,7 @@
 import type { User } from "@supabase/supabase-js";
 
 export type CreateActionState = {
-    email: string,
+    email?: string,
     password?: string,
     passwordRepeat?: string,
     login?: string,
@@ -29,6 +29,8 @@ export interface MenuState {
   isWeather: boolean,
   isExchange: boolean,
   isMain: boolean,
+  nowWeather: InfoWeather,
+  nowExchange: Valute,
 }
 
 export interface InfoWeather {
@@ -63,6 +65,7 @@ export interface InfoWeather {
       },
   },
   error: string | null,
+  isLoading?: boolean,
 }
 
 export interface ValuteItem {
@@ -79,6 +82,7 @@ export interface Valute {
   data: ValuteItem[],
   dateExchange: string,
   error: null | string,
+  isLoading?: boolean,
 }
 
 export interface InfoCourse {
@@ -104,10 +108,10 @@ export interface ExpensesState {
   
 }
 
-export interface ExpensesList {
-  key: React.Key;
-  category: string;
-  name: string;
-  amount: number;
-  date: string;
-}
+// export interface ExpensesItem {
+//   key: React.Key;
+//   category: string;
+//   name: string;
+//   amount: number;
+//   date: string;
+// }

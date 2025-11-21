@@ -1,4 +1,4 @@
-import {createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { AuthState } from "../shared/types";
 import type { AppDispatch, RootState } from "../app/store";
 import { supabase } from "./lib/supabase";
@@ -61,6 +61,9 @@ const authSlice = createSlice({
         setUser: (state, action) => {
             state.user = action.payload
         },
+        setLoading: (state, action) => {
+            state.loading = action.payload
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -80,7 +83,7 @@ const authSlice = createSlice({
     },
 })
 
-export const {setSignUp, setSignIn, setSignOut, setUser, setResetPassword, setNewPassword} = authSlice.actions
+export const {setSignUp, setSignIn, setSignOut, setUser, setResetPassword, setNewPassword, setLoading} = authSlice.actions
 export const authReducer = authSlice.reducer
 
 export const selectSignUp = (state: RootState) => state.auth.signUp

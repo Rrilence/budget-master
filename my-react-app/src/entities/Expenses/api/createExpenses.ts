@@ -2,7 +2,7 @@ import type { User } from "@supabase/supabase-js";
 import { supabase } from "../../../entities/lib/supabase";
 import type { InfoExpense } from "../../../shared/types"
 import { regExpression } from "../../../shared/validation";
-import { notifyCreateExpense } from "../../../shared/toasts";
+import { notifyCreateErrorExpense, notifyCreateExpense } from "../../../shared/toasts";
 
 export const defaultState: InfoExpense = {
     user_id: null,
@@ -54,6 +54,7 @@ export const createExpenses = (user: User) => {
                  };
             } catch (error) {
                 console.error("Ошибка при добавлении статьи расхода", error); 
+                notifyCreateErrorExpense();
                 return {
                    ...prevState,
                 };     

@@ -1,4 +1,4 @@
-import { startTransition, useActionState, useEffect, useState } from "react";
+import { startTransition, useActionState, useState } from "react";
 import { regExpression } from "../../../shared/validation";
 import { notifyName } from "../../../shared/toasts";
 
@@ -10,20 +10,19 @@ import sunset from '../../../assets/sunset.png'
 import pressure from '../../../assets/pressure.png'
 
 import { Input } from 'antd';
-import { defaultState, submitCity, submitGeolocation } from "../api/api";
-import { useLocation } from "../hooks/useLocation";
+import { defaultWeather, submitCity } from "../api/api";
 import { useBg } from "../hooks/useBg";
 import clsx from "clsx";
+import { useSelector } from "react-redux";
+import { selectNowWeather } from "../../../entities/headerMenu-slice";
 
 const { Search } = Input;
 
 const Weather = () => {
-    const {lat, lng, locationError, available, enable} = useLocation();
+    const geoState = useSelector(selectNowWeather);
 
     const [city, setCity] = useState('');
-
-    const [geoState, submitGeoAction] = useActionState(submitGeolocation, defaultState)
-    const [cityState, dispatch] = useActionState(submitCity, defaultState)
+ const [cityState, dispatch] = useActionState(submitCity, defaultWeather)
 
     const currentState = cityState.data.name ? cityState : geoState;
 
@@ -48,23 +47,8 @@ const Weather = () => {
         setCity(e.target.value);
     };
 
-    useEffect(() => {
-        if(lat && lng) {
-            startTransition(() => {submitGeoAction({ lat, lng })})    
-        } else if(locationError) {
-            console.error('Ошибка определения местоположения', locationError?.message);
-        }
-    }, [lat, lng, locationError])
-
-
     return (
         <div className={`${styles.container} ${styles[`container--${bg}`]}`}>
-            {!available && (
-                <div>Ваш браузер не поддерживает геолокацию</div>
-            )}
-            {!enable && (
-                <div>Геолокация отключена</div>
-            )}
             <div className={styles.wrapper}>
                 <Search placeholder="Введите название города" allowClear
                 onSearch={onSearch}

@@ -1,10 +1,11 @@
 import { DatePicker, Flex, Table, type TableColumnsType } from "antd";
-import type { ExpensesList, InfoExpense } from "../../../shared/types";
+import type { InfoExpense } from "../../../shared/types";
 import dayjs, { Dayjs } from 'dayjs';
 import 'dayjs/locale/ru';
 import { useSelector } from "react-redux";
 import { selectExpenses } from "../expenses-slice";
 import { CarFilled, CoffeeOutlined, GiftFilled, GlobalOutlined, HeartFilled, HomeFilled, LoadingOutlined, MedicineBoxFilled, QqOutlined, ShoppingCartOutlined, SkinFilled, SmileFilled, TruckFilled, WifiOutlined } from "@ant-design/icons";
+import styles from './styles.module.css'
 
 dayjs.locale('ru');
 
@@ -15,36 +16,34 @@ const expenses = useSelector(selectExpenses)
 
 const getCategoryIcon = (category: string) => {
     switch (category) {
-      case 'дом': return <HomeFilled style={{ marginRight: 8, color: '#cc1616ff'}} />;
-      case 'продукты': return <ShoppingCartOutlined style={{ marginRight: 8, color: '#2656e9ff' }} />;
-      case 'здоровье': return <MedicineBoxFilled style={{ marginRight: 8, color: '#14bc14ff' }} />;
-      case 'одежда': return <SkinFilled style={{ marginRight: 8, color: '#7a068fff' }} />;
-      case 'транспорт': return <TruckFilled style={{ marginRight: 8, color: '#e07314ff' }} />;
-      case 'спорт': return <HeartFilled style={{ marginRight: 8, color: '#25eeb2ff' }} />;
-      case 'досуг': return <SmileFilled style={{ marginRight: 8, color: '#e7f73aff' }} />;
-      case 'путешествия': return <GlobalOutlined style={{ marginRight: 8, color: 'rgba(63, 175, 236, 1)' }} />;
-      case 'машина': return <CarFilled style={{ marginRight: 8, color: '#9025eeff' }} />;
-      case 'кафе': return <CoffeeOutlined style={{ marginRight: 8, color: '#6a390fff' }} />;
-      case 'связь': return <WifiOutlined style={{ marginRight: 8, color: '#96e319ff' }} />;
-      case 'домашние животные': return <QqOutlined style={{ marginRight: 8, color: '#281c13ff'  }} />;
-      case 'подарки': return <GiftFilled style={{ marginRight: 8, color: '#c828aaff' }} />;
-      default: return <LoadingOutlined style={{ marginRight: 8, color: '#5aececff' }} />;
+      case 'дом': return <HomeFilled className={styles.icon} style={{ color: '#cc1616ff'}} />;
+      case 'продукты': return <ShoppingCartOutlined className={styles.icon} style={{ color: '#2656e9ff' }} />;
+      case 'здоровье': return <MedicineBoxFilled className={styles.icon} style={{ color: '#14bc14ff' }} />;
+      case 'одежда': return <SkinFilled className={styles.icon} style={{ color: '#7a068fff' }} />;
+      case 'транспорт': return <TruckFilled className={styles.icon} style={{ color: '#e07314ff' }} />;
+      case 'спорт': return <HeartFilled className={styles.icon} style={{ color: '#25eeb2ff' }} />;
+      case 'досуг': return <SmileFilled className={styles.icon} style={{ color: '#e7f73aff' }} />;
+      case 'путешествия': return <GlobalOutlined className={styles.icon} style={{ color: 'rgba(63, 175, 236, 1)' }} />;
+      case 'машина': return <CarFilled className={styles.icon} style={{ color: '#9025eeff' }} />;
+      case 'кафе': return <CoffeeOutlined className={styles.icon} style={{ color: '#6a390fff' }} />;
+      case 'связь': return <WifiOutlined className={styles.icon} style={{ color: '#96e319ff' }} />;
+      case 'домашние животные': return <QqOutlined className={styles.icon} style={{ color: '#281c13ff'  }} />;
+      case 'подарки': return <GiftFilled className={styles.icon} style={{ color: '#c828aaff' }} />;
+      default: return <LoadingOutlined className={styles.icon} style={{ color: '#5aececff' }} />;
     }
   };
 
-const columns: TableColumnsType = [
+const columns: TableColumnsType<InfoExpense> = [
     {
         title: 'Название',
         dataIndex: 'name',
+        key: 'name', 
         render: (_, record: InfoExpense) => (
             <Flex>
                 {getCategoryIcon(record.category)}
                 <div>
-                    {record.name}
-                    <span>
-                        {record.category}
-
-                    </span>
+                    <p className={styles.name}>{record.name}</p>
+                    <p className={styles.category}>{record.category}</p>
                 </div>
             </Flex>
             ),
@@ -65,12 +64,14 @@ const columns: TableColumnsType = [
         {text: 'Подарки', value: 'подарки'},
         {text: 'Другое', value: 'другое'},
         ],
-        onFilter: (value, record) => record.name.indexOf(value as string) === 0,
+        onFilter: (value, record) => record.category.indexOf(value as string) === 0,
         filterSearch: true,
+        fixed: 'left',
     },
     {
         title: 'Стоимость',
         dataIndex: 'amount',
+        key: 'amount', 
         defaultSortOrder: 'descend',
         sorter: (a, b) => a.amount - b.amount,
         width: '25%',
@@ -78,12 +79,13 @@ const columns: TableColumnsType = [
     {
         title: 'Дата',
         dataIndex: 'date',
-        sorter: (a, b): number => dayjs(a.date).valueOf() - dayjs(b.date).valueOf(),
+        key: 'date', 
+        sorter: (a, b) => dayjs(a.date, dateFormat).valueOf() - dayjs(b.date, dateFormat).valueOf(),
         sortDirections: ['ascend', 'descend'],
         filterDropdown: ({ setSelectedKeys, confirm, selectedKeys }) => (
             <div style={{ padding: 8 }}>
                 <DatePicker
-                    onChange={(date: Dayjs | null) => {
+                    onChange={(date) => {
                         if (date) {
                             setSelectedKeys([date.format(dateFormat)]);
                         } else {
@@ -92,21 +94,28 @@ const columns: TableColumnsType = [
                     }}
                     onOk={() => confirm()}
                     format={dateFormat}
-                    value={selectedKeys[0] ? dayjs(String(selectedKeys[0]), dateFormat) : null}
+                    value={selectedKeys[0] ? dayjs(String(selectedKeys[0]), dateFormat) : null
+                    }
+                    needConfirm
                 />
             </div>
-        ),
-        onFilter: (value, record) => dayjs(record.date).format(dateFormat) === value,
+            ),
+        onFilter: (value, record) => {
+      return record.date === value; 
+        },
         filterSearch: true,
         width: '25%',
     },
 ];
 
+
     return(
         <Table
             columns={columns}
+            className={styles.customTable}
             dataSource={expenses}
-            rowKey={(record) => record.id}
+            rowKey={(record) => record.id!}
+            scroll={{ x: 'max-content' }}
         />
     )
 }

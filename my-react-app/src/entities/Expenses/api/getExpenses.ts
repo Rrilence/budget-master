@@ -1,11 +1,14 @@
+import type { User } from "@supabase/supabase-js";
 import { supabase } from "../../lib/supabase";
 
-export const getExpenses = async() => {
+export const getExpenses = async(user: User) => {
+
     const { data, error  } = await supabase
       .from('expenses')
-      .select('user_id, name, category, amount, date')
+      .select('id, user_id, name, category, amount, date')
       if (error) {throw error}
                 if(data) {
-                    return data;
-                }
+                    const dataUser = data.filter((item) => item.user_id === user.id)
+                    return dataUser;
+                } else {return []}
 }

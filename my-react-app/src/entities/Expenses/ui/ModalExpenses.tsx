@@ -33,7 +33,6 @@ const ModalExpenses = () => {
                     error: result.error,
                 }}
             if (result) {
-            console.log("result:", result)
                 return { 
                     ...prevState,
                     user_id: result.user_id,
@@ -66,7 +65,6 @@ const ModalExpenses = () => {
 
     const onFinish: FormProps<InfoExpense>['onFinish'] = (values) => {
           const data = {...values, date: dayjs(values.date).format('DD.MM.YYYY')}
-          console.log('Success:', data);
            startTransition(() => {
                 submitAction(data);
             });
