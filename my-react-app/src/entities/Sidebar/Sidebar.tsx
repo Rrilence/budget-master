@@ -37,13 +37,13 @@ const Sidebar = () => {
                 {sidebar && 
                     <div className={styles.navlink}
                     onClick={() => dispatch(setActive('Главная'))}>
-                        <NavLink className={clsx(`${theme === 'light' ? 'theme-light' : 'theme-dark'}`, styles.link)} to='/dashboard'>Обзор</NavLink>
-                        <NavLink className={clsx(`${theme === 'light' ? 'theme-light' : 'theme-dark'}`, styles.link)} to='/budget'>Бюджет</NavLink>
-                        <NavLink className={clsx(`${theme === 'light' ? 'theme-light' : 'theme-dark'}`, styles.link)} to='/transactions'>Транзакции</NavLink>
-                        <NavLink className={clsx(`${theme === 'light' ? 'theme-light' : 'theme-dark'}`, styles.link)} to='/analytics'>Аналитика</NavLink>
-                        <NavLink className={clsx(`${theme === 'light' ? 'theme-light' : 'theme-dark'}`, styles.link)} to='/goals'>Цели</NavLink>
-                        <NavLink className={clsx(`${theme === 'light' ? 'theme-light' : 'theme-dark'}`, styles.link)} to='/predict'>Прогнозы</NavLink>
-                        <NavLink className={clsx(`${theme === 'light' ? 'theme-light' : 'theme-dark'}`, styles.link)} to='/settings'>Настройки</NavLink>
+                        <NavLink className={clsx(`${theme === 'light' ? 'theme-light' : 'theme-dark'}`, styles.link)} to='dashboard'>Обзор</NavLink>
+                        <NavLink className={clsx(`${theme === 'light' ? 'theme-light' : 'theme-dark'}`, styles.link)} to='budget'>Бюджет</NavLink>
+                        <NavLink className={clsx(`${theme === 'light' ? 'theme-light' : 'theme-dark'}`, styles.link)} to='transactions'>Транзакции</NavLink>
+                        <NavLink className={clsx(`${theme === 'light' ? 'theme-light' : 'theme-dark'}`, styles.link)} to='analytics'>Аналитика</NavLink>
+                        <NavLink className={clsx(`${theme === 'light' ? 'theme-light' : 'theme-dark'}`, styles.link)} to='goals'>Цели</NavLink>
+                        <NavLink className={clsx(`${theme === 'light' ? 'theme-light' : 'theme-dark'}`, styles.link)} to='predict'>Прогнозы</NavLink>
+                        <NavLink className={clsx(`${theme === 'light' ? 'theme-light' : 'theme-dark'}`, styles.link)} to='settings'>Настройки</NavLink>
                     </div>
                 }
             </div>

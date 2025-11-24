@@ -1,7 +1,7 @@
 import { CarFilled, CoffeeOutlined, GiftFilled, GlobalOutlined, HeartFilled, HomeFilled, LoadingOutlined, MedicineBoxFilled, QqOutlined, ShoppingCartOutlined, SkinFilled, SmileFilled, TruckFilled, WifiOutlined } from "@ant-design/icons"
 import { Button, DatePicker, Form, Input, InputNumber, Modal, Select } from "antd"
 import { useDispatch, useSelector } from "react-redux"
-import { selectIsOpenModal, setIsOpenModal } from "../expenses-slice";
+import { initialState, selectExpenses, selectInitialValues, selectIsOpenModal, selectIsUpdateExpense, selectTransactions, setExpenses, setinitialValues, setIsOpenModal, setIsUpdateExpense } from "../expenses-slice";
 import type { FormProps } from "antd";
 import dayjs from 'dayjs';
 import type { InfoExpense } from "../../../shared/types";
@@ -10,14 +10,19 @@ import { createExpenses, defaultState } from "../api/createExpenses";
 import { selectUser } from "../../auth-slice";
 import { regExpression } from "../../../shared/validation";
 import { notifyNameExpense } from "../../../shared/toasts";
+import { updateExpenses } from "../api/updateExpense";
 
 const ModalExpenses = () => {
     const [form] = Form.useForm();
     const dispatch = useDispatch();
     const isOpenModal = useSelector(selectIsOpenModal);
+    const transactions = useSelector(selectTransactions);
+    const isUpdateExpense = useSelector(selectIsUpdateExpense);
     const user = useSelector(selectUser);
+    const expenses = useSelector(selectExpenses);
+    const initialValues = useSelector(selectInitialValues);
 
-     const [name, setName] = useState('');
+    const [name, setName] = useState('');
     const [state, submitAction, isPending] = useActionState(async (prevState: InfoExpense | undefined, values: InfoExpense) => {
         if (!user) {
             throw new Error('Пользователь не авторизован');
@@ -26,29 +31,47 @@ const ModalExpenses = () => {
             console.warn("prevState is undefined in useActionState, using defaultState");
             return defaultState;
         }
-        const result = await createExpenses(user)(prevState, values)  
-            if(result && result.error) { 
-                return { 
-                    ...prevState,
-                    error: result.error,
-                }}
-            if (result) {
-                return { 
-                    ...prevState,
-                    user_id: result.user_id,
-                    name: result.name,
-                    category: result.category,
-                    amount: result.amount,
-                    date: result.date,
-                    error: null,
-                    // setExpensesState([...expensesState, result])
-                }
-            } else {
-                return { 
-                    ...prevState,
-                    error: 'Не удалось создать запись',
-                }
+        if(isUpdateExpense) {
+            if(initialValues && initialValues.id && initialValues.user_id) {
+                const result = await updateExpenses(initialValues.id, initialValues.user_id, prevState, values)
+                if(result && result.error) { 
+                        return { 
+                            ...prevState,
+                            error: result.error,
+                        }}
+                    if (result) {
+                        const newExpenses = expenses.map(expense => {
+                            if(expense.id === result.id) {
+                                return {
+                            ...expense, ...result}
+                            } else {
+                                return expense
+                            }}
+                            );
+                        dispatch(setExpenses(newExpenses));
+                    } else {
+                        return { 
+                            ...prevState,
+                            error: 'Не удалось редактировать запись',
+                        }
+                    }
             }
+        } else {
+            const result = await createExpenses(user)(prevState, values)  
+                if(result && result.error) { 
+                    return { 
+                        ...prevState,
+                        error: result.error,
+                    }}
+                if (result) {
+                    dispatch(setExpenses([...expenses, result]));
+                } else {
+                    return { 
+                        ...prevState,
+                        error: 'Не удалось создать запись',
+                    }
+                }
+        }
                 }, defaultState);
 
     const handleNameChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
@@ -69,12 +92,10 @@ const ModalExpenses = () => {
                 submitAction(data);
             });
            dispatch(setIsOpenModal(false));
-           form.resetFields();
+           dispatch(setIsUpdateExpense(false));
+           dispatch(setinitialValues(initialState.initialValues));
         };
         
-    const initialValues = {
-        date: dayjs(),
-    }
     const dateFormatList = ['DD.MM.YYYY'];
 
 
@@ -82,20 +103,19 @@ const ModalExpenses = () => {
       <Modal
         title="Расходы"
         closable={{ 'aria-label': 'Custom Close Button' }}
-        open={isOpenModal}
+        open={isOpenModal && transactions === 'Расходы'}
         onCancel={() => dispatch(setIsOpenModal(false))}
         footer={
             <Button key="submit" type="primary"
             htmlType="submit" onClick={() => form.submit()}
-            loading={isPending}>
-            Добавить расход
+            loading={isPending}>{isUpdateExpense ? 'Редактировать' : 'Добавить'}
             </Button>
             }
         style={{maxWidth: 400}}>
             <Form
                 form={form}
                 autoComplete="off"
-                initialValues={initialValues} 
+                initialValues={{...initialValues, date: initialValues.date ? dayjs(initialValues.date, 'DD.MM.YYYY') : null }} 
                 onFinish={onFinish}>
                 <Form.Item 
                 name="name" 

@@ -92,26 +92,43 @@ export interface InfoCourse {
   value: number;
 }
 
-export type InfoExpense = {
+export interface InfoIncome {
   id?: string | undefined,
   user_id?: string | null | undefined,
   name: string,
-  category: string,
   amount: number,
   date: string,
   error?: string | null,
 }
+export interface InfoExpense extends InfoIncome {
+  category: string,
+}
+
+type TransactionState = 'Расходы' | 'Доходы';
 
 export interface ExpensesState {
   isModalOpen: boolean,
+  isUpdateExpense: boolean,
+  transactions: TransactionState,
   expenses: InfoExpense[],
-  
+  initialValues: {
+    id?: string | undefined,
+    user_id?: string | undefined,
+    name: string,
+    category: string,
+    amount: string,
+    date: string,
+  }
 }
 
-// export interface ExpensesItem {
-//   key: React.Key;
-//   category: string;
-//   name: string;
-//   amount: number;
-//   date: string;
-// }
+export interface IncomesState {
+  isUpdateIncome: boolean,
+  incomes: InfoIncome[],
+  initialValues: {
+    id?: string | undefined,
+    user_id?: string | undefined,
+    name: string,
+    amount: string,
+    date: string,
+  }
+}

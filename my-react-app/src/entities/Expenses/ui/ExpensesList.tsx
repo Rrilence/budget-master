@@ -1,18 +1,25 @@
-import { DatePicker, Flex, Table, type TableColumnsType } from "antd";
+import { Button, DatePicker, Flex, Space, Table, type TableColumnsType } from "antd";
 import type { InfoExpense } from "../../../shared/types";
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
-import { useSelector } from "react-redux";
-import { selectExpenses } from "../expenses-slice";
+import { useDispatch, useSelector } from "react-redux";
+import { selectExpenses, selectIsOpenModal, setExpenses, setinitialValues, setIsOpenModal, setIsUpdateExpense } from "../expenses-slice";
 import { CarFilled, CoffeeOutlined, GiftFilled, GlobalOutlined, HeartFilled, HomeFilled, LoadingOutlined, MedicineBoxFilled, QqOutlined, ShoppingCartOutlined, SkinFilled, SmileFilled, TruckFilled, WifiOutlined } from "@ant-design/icons";
 import styles from './styles.module.css'
+import { useState } from "react";
+import { notifyTransaction } from "../../../shared/toasts";
+import { deleteExpenses } from "../api/deleteExpense";
+import ModalExpenses from "./ModalExpenses";
 
 dayjs.locale('ru');
 
 const ExpensesList = () => {
 
+const dispatch = useDispatch();
 const dateFormat = 'DD.MM.YYYY';
-const expenses = useSelector(selectExpenses)
+const expenses = useSelector(selectExpenses);
+const isOpenModal = useSelector(selectIsOpenModal);
+const [expandedRowKeys, setExpandedRowKeys] = useState<string[]>([]);
 
 const getCategoryIcon = (category: string) => {
     switch (category) {
@@ -67,7 +74,7 @@ const columns: TableColumnsType<InfoExpense> = [
         onFilter: (value, record) => record.category.indexOf(value as string) === 0,
         filterSearch: true,
         fixed: 'left',
-    },
+    }, Table.EXPAND_COLUMN,
     {
         title: 'Стоимость',
         dataIndex: 'amount',
@@ -108,15 +115,82 @@ const columns: TableColumnsType<InfoExpense> = [
     },
 ];
 
+    const expandedRowRender = (record: InfoExpense) => {
+
+        function onUpdate (record: InfoExpense) {
+            if(record.id && record.user_id) {  
+                dispatch(setIsUpdateExpense(true)); 
+                dispatch(setIsOpenModal(true));
+                dispatch(setinitialValues({
+                    id: record.id,
+                    user_id: record.user_id,
+                    name: record.name,
+                    category: record.category,
+                    amount: record.amount,
+                    date: record.date,
+                }));
+
+            }
+        }
+
+        function onDelete (record: InfoExpense) {
+                if(record.id && record.user_id) {
+                    deleteExpenses(record.id, record.user_id)
+                    .then(() => {
+                        const updateExpenses = expenses.filter(expense => expense.id !== record.id);
+                        dispatch(setExpenses(updateExpenses));
+                    })
+                }
+            }
+        return (
+            <Space>
+            <Button type="default" size="small" onClick={() => onUpdate(record)}>Редактировать</Button>
+            <Button danger size="small" onClick={() => onDelete(record)}>Удалить</Button>
+            </Space>
+        )
+
+        
+    };
+
+    
+     const onRow = (record: InfoExpense) => {
+        return {
+        onClick: () => {
+            {
+                if (record.id) {
+                    const isExpanded = expandedRowKeys.includes(record.id);
+                    setExpandedRowKeys(isExpanded ? [] : [record.id]);
+                } else {
+                    console.warn("record.id is undefined for this record:", record);
+                    notifyTransaction();
+                }
+            }}
+        }
+    }
 
     return(
-        <Table
-            columns={columns}
-            className={styles.customTable}
-            dataSource={expenses}
-            rowKey={(record) => record.id!}
-            scroll={{ x: 'max-content' }}
-        />
+        <>
+            <Table
+                columns={columns}
+                dataSource={expenses}
+                rowKey={(record) => record.id!}
+                scroll={{ x: 'max-content' }}
+                expandable={{
+                    expandedRowRender,
+                    rowExpandable: () => true,
+                    expandedRowKeys,
+                    onExpand: (expanded, record) => {
+                        if (expanded) {
+                            setExpandedRowKeys([record.id!]);
+                        } else {
+                            setExpandedRowKeys([]);
+                        }
+                    },
+                }}
+                onRow={onRow}
+            />
+            {isOpenModal && <ModalExpenses/>}
+        </>
     )
 }
 

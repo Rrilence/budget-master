@@ -94,7 +94,7 @@ const notifyGeolocation = () => {
 } 
 
 const notifyCreateExpense = () => {
-    toast.success('Статья расходов добавлена', {
+    toast.success('Статья расхода добавлена', {
         toastId: '003',
         position: "top-right",
         autoClose: 1500,
@@ -104,7 +104,27 @@ const notifyCreateExpense = () => {
 } 
 
 const notifyCreateErrorExpense = () => {
-    toast.error('Ошибка, статья расходов не добавлена', {
+    toast.error('Ошибка, статья расхода не добавлена', {
+        toastId: '003',
+        position: "top-right",
+        autoClose: 1500,
+        closeOnClick: true,
+        theme: "light",
+    })
+} 
+
+const notifyCreateIncome = () => {
+    toast.success('Статья дохода добавлена', {
+        toastId: '003',
+        position: "top-right",
+        autoClose: 1500,
+        closeOnClick: true,
+        theme: "light",
+    })
+} 
+
+const notifyCreateErrorIncome = () => {
+    toast.error('Ошибка, статья дохода не добавлена', {
         toastId: '003',
         position: "top-right",
         autoClose: 1500,
@@ -123,8 +143,38 @@ const notifyNameExpense = () => {
     })
 } 
 
-const notifyErrorExpenses = () => {
-    toast.error('Ошибка при загрузке данных расходов', {
+const notifyUpdateExpense = () => {
+    toast.success('Статья расходов редактирована', {
+        toastId: '003',
+        position: "top-right",
+        autoClose: 1500,
+        closeOnClick: true,
+        theme: "light",
+    })
+} 
+
+const notifyUpdateIncome = () => {
+    toast.success('Статья доходов редактирована', {
+        toastId: '003',
+        position: "top-right",
+        autoClose: 1500,
+        closeOnClick: true,
+        theme: "light",
+    })
+} 
+
+const notifyError = () => {
+    toast.error('Ошибка при загрузке данных', {
+        toastId: '003',
+        position: "top-right",
+        autoClose: 1500,
+        closeOnClick: true,
+        theme: "light",
+    })
+} 
+
+const notifyTransaction = () => {
+    toast.error('Запись не может быть изменена или удалена', {
         toastId: '003',
         position: "top-right",
         autoClose: 1500,
@@ -142,10 +192,14 @@ export {
     notifyGeolocation,
     notifyWeatherCity,
     notifyCreateExpense,
-    notifyErrorExpenses,
+    notifyError,
     notifyNameExpense,
     notifySignInError,
     notifyCreateErrorExpense,
     notifySignUpError2,
-    
+    notifyTransaction,
+    notifyUpdateExpense,
+    notifyCreateErrorIncome, 
+    notifyCreateIncome,
+    notifyUpdateIncome,
 }

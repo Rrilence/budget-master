@@ -12,7 +12,7 @@ const initialState: MenuState = {
     isDate: false,
     isWeather: false,
     isExchange: false,
-    isMain: false,
+    isMain: true,
     nowWeather: defaultWeather,
     nowExchange: defaultExchange,
 }
@@ -71,7 +71,6 @@ export const fetchExchange = createAsyncThunk(
             .get('https://www.cbr-xml-daily.ru/daily_json.js')
             const courseData: ValuteItem[] = Object.values(res.data.Valute);
             const date = formatDateExchange(res.data.Date);
-            console.log('slice', courseData);
             
             return {data: courseData, dateExchange: date, error: null}
         } catch (error) {

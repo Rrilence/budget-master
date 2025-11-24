@@ -25,13 +25,13 @@ export const AppRouter = () => {
             <Route path="/welcome" index element={<StartPage/>}/>
                 <Route element={<PrivateRoute redirectTo="/welcome" />}>
                     <Route path="/" element={<LayoutWidget/>}>
-                    <Route path="/dashboard" element={<DashBoard/>}/>
-                    <Route path="/budget" element={<Budget/>}/>
-                    <Route path="/transactions" element={<Transactions/>}/>
-                    <Route path="/analytics" element={<Analytics/>}/>
-                    <Route path="/goals" element={<Goals/>}/>
-                    <Route path="/predict" element={<Predict/>}/>
-                    <Route path="/settings" element={<Settings/>}/>
+                    <Route path="dashboard" element={<DashBoard/>}/>
+                    <Route path="budget" element={<Budget/>}/>
+                    <Route path="transactions" element={<Transactions/>}/>
+                    <Route path="analytics" element={<Analytics/>}/>
+                    <Route path="goals" element={<Goals/>}/>
+                    <Route path="predict" element={<Predict/>}/>
+                    <Route path="settings" element={<Settings/>}/>
                 </Route>
             </Route>
             <Route path="/update-password" element={<UpdatePassword />} />

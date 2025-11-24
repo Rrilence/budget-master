@@ -32,8 +32,6 @@ const LayoutWidget = () => {
     const WeatherDate = useSelector(selectNowWeather);
     const ExchangeDate = useSelector(selectNowExchange);
     const nowWeather = WeatherDate.data.name + ' ' + WeatherDate.data.temp + '°';
-    console.log(ExchangeDate);
-    
     const ExchangeUSD = ExchangeDate.data.find((item) => item.CharCode === 'USD');
     const ExchangeEUR = ExchangeDate.data.find((item) => item.CharCode === 'EUR');
     const nowExchangeUSD = ExchangeUSD?.CharCode + ' ' + Number(ExchangeUSD?.Value).toFixed(2);

@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+
 const formatDateWeather = (date: Date) => {
     const options: Intl.DateTimeFormatOptions = {
         month: 'long',
@@ -47,10 +49,24 @@ const formatDateExchange = (dateExchange: string) => {
   return `${day}.${month}.${year} ${hours}:${minutes}`;
 }
 
+// const formatDateExpenses = (date: Date) => {
+//   const day = String(date.getDate()).padStart(2, '0');
+//   const month = String(date.getMonth() + 1).padStart(2, '0'); 
+//   const year = date.getFullYear();
+
+//   return `${day}.${month}.${year}`;
+// }
+
+const formatDateExpenses = (date: Date) => {
+  return dayjs(date).format('DD.MM.YYYY'); 
+}
+
 export {
     formatDateWeather,
     formatDayWeather,
     formatWeekDayWeather,
     formatTimeWeather,
     formatDateExchange,
+    formatDateExpenses,
+
 }

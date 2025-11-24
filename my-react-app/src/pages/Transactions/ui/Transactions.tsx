@@ -1,23 +1,25 @@
 import { Button, Flex, Segmented,} from "antd"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 
 import styles from './styles.module.css'
 import { useDispatch, useSelector } from "react-redux";
-import { notifyErrorExpenses } from "../../../shared/toasts";
-import { selectIsOpenModal, setExpenses, setIsOpenModal } from "../../../entities/Expenses/expenses-slice";
+import { notifyError } from "../../../shared/toasts";
+import { selectIsOpenModal, selectTransactions, setExpenses, setIsOpenModal, setTransactions } from "../../../entities/Expenses/expenses-slice";
 import ModalExpenses from "../../../entities/Expenses/ui/ModalExpenses";
 import { PlusCircleOutlined } from "@ant-design/icons";
 import { getExpenses } from "../../../entities/Expenses/api/getExpenses";
 import ExpensesList from "../../../entities/Expenses/ui/ExpensesList";
 import { selectUser } from "../../../entities/auth-slice";
+import IncomesList from "../../../entities/Incomes/ui/IncomesList";
+import ModalIncomes from "../../../entities/Incomes/ui/ModalIncomes";
+import { getIncomes } from "../../../entities/Incomes/api/getIncomes";
+import { setIncomes } from "../../../entities/Incomes/incomes-slice";
 
 
 const Transactions = () => {
     const dispatch = useDispatch();
-    
-    const [transactions, setTransactions] = useState('Расходы');
+    const transactions = useSelector(selectTransactions);
     const isOpenModal = useSelector(selectIsOpenModal);
-    console.log(transactions);
     const user = useSelector(selectUser);
 
     const showModal = () => {
@@ -25,33 +27,45 @@ const Transactions = () => {
     };
     
     useEffect(() => {
-        const initialState = async () => {
+        const initialStateExpenses = async () => {
             try {const data = await getExpenses(user!);
                 dispatch(setExpenses(data));
             } catch (error) {
             console.error('Ошибка при загрузке данных', error);
-            notifyErrorExpenses();
+            notifyError();
             return []
         }}
-        initialState()
+        const initialStateIncomes = async () => {
+            try {const data = await getIncomes(user!);
+                dispatch(setIncomes(data));
+            } catch (error) {
+            console.error('Ошибка при загрузке данных', error);
+            notifyError();
+            return []
+        }}
+
+        initialStateExpenses()
+        initialStateIncomes()
     }, [dispatch, user]);
 
     return (
             <Flex vertical className={styles.container}>
                 <Segmented<string>
                     options={['Расходы', 'Доходы']}
-                    onChange={(value) => setTransactions(value)}
+                    onChange={(value) => dispatch(setTransactions(value))}
                     block
                     className={styles.title}
                 />
                 {transactions === "Расходы" && <ExpensesList/>}
+                {transactions === "Доходы" && <IncomesList/>}
                 <Button 
                 type="primary"
                 icon={<PlusCircleOutlined style={{fontSize: '35px'}}/>} 
                 onClick={showModal}
                 shape="circle"
                 className={styles.add}/>
-                {isOpenModal && <ModalExpenses/>}
+                {isOpenModal && transactions === 'Расходы' && <ModalExpenses/>}
+                {isOpenModal && transactions === 'Доходы' && <ModalIncomes/>}
             </Flex>
     )
 }
