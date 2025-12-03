@@ -8,10 +8,13 @@ import ModalIncomes from "./ModalIncomes";
 import { notifyTransaction } from "../../../shared/toasts";
 import { deleteIncome } from "../api/deleteIncome";
 import { selectIsOpenModal, setIsOpenModal } from "../../Expenses/expenses-slice";
+import { useStyles } from "../../../widgets/Exchange/hooks/useStyles";
 
 dayjs.locale('ru');
 
 const IncomesList = () => {
+  const { styles } = useStyles();
+
     const dispatch = useDispatch();
     const dateFormat = 'DD.MM.YYYY';
     const incomes = useSelector(selectIncomes);
@@ -118,6 +121,7 @@ const IncomesList = () => {
             <Table
                 columns={columns}
                 dataSource={incomes}
+                className={styles.root}
                 rowKey={(record) => record.id!}
                 scroll={{ x: 'max-content' }}
                 expandable={{

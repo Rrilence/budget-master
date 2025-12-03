@@ -1,4 +1,4 @@
-import { Button, Flex, Segmented,} from "antd"
+import { Flex, FloatButton, Segmented,} from "antd"
 import { useEffect } from "react"
 
 import styles from './styles.module.css'
@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { notifyError } from "../../../shared/toasts";
 import { selectIsOpenModal, selectTransactions, setExpenses, setIsOpenModal, setTransactions } from "../../../entities/Expenses/expenses-slice";
 import ModalExpenses from "../../../entities/Expenses/ui/ModalExpenses";
-import { PlusCircleOutlined } from "@ant-design/icons";
+import { PlusOutlined } from "@ant-design/icons";
 import { getExpenses } from "../../../entities/Expenses/api/getExpenses";
 import ExpensesList from "../../../entities/Expenses/ui/ExpensesList";
 import { selectUser } from "../../../entities/auth-slice";
@@ -28,7 +28,8 @@ const Transactions = () => {
     
     useEffect(() => {
         const initialStateExpenses = async () => {
-            try {const data = await getExpenses(user!);
+            try {if(!user) {throw Error}
+            const data = await getExpenses(user);
                 dispatch(setExpenses(data));
             } catch (error) {
             console.error('Ошибка при загрузке данных', error);
@@ -58,12 +59,11 @@ const Transactions = () => {
                 />
                 {transactions === "Расходы" && <ExpensesList/>}
                 {transactions === "Доходы" && <IncomesList/>}
-                <Button 
+                <FloatButton 
                 type="primary"
-                icon={<PlusCircleOutlined style={{fontSize: '35px'}}/>} 
+                icon={<PlusOutlined />} 
                 onClick={showModal}
-                shape="circle"
-                className={styles.add}/>
+                />
                 {isOpenModal && transactions === 'Расходы' && <ModalExpenses/>}
                 {isOpenModal && transactions === 'Доходы' && <ModalIncomes/>}
             </Flex>

@@ -2,17 +2,10 @@
     max-width: 600px;
     margin: 20px; 
 }
-
-.add {
-    position: fixed;
-    top: 500px;
-    left: auto;
-    right: 40px;
-}
-
 .title {
     font-weight: bold;
     padding: 10px;
+    background-image: linear-gradient(180deg, rgb(158, 201, 234), rgb(29, 79, 108));
 }
 
 @media (min-width: 720px) {

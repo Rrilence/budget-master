@@ -4,7 +4,6 @@ import { regExpression } from "../../../shared/validation";
 import { supabase } from "../../lib/supabase";
 
 export const updateExpenses = async(id: string, user_id: string, prevState: InfoExpense, values: InfoExpense): Promise<InfoExpense | undefined> => {
-   
             let name = values.name;
             const category = values.category;
             const amount = values.amount;

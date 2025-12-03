@@ -12,7 +12,10 @@
 .category {
      font-weight: normal;
      font-size: 0.8rem;
-     color: rgba(0, 0, 0, 0.5);
+}
+
+.modal {
+    max-width: 400px;
 }
 
 @media (min-width: 720px) {

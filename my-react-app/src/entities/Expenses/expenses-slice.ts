@@ -1,9 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { ExpensesState } from "../../shared/types";
 import type { RootState } from "../../app/store";
-import { formatDateExpenses } from "../../shared/formatting";
+import { formatDate } from "../../shared/formatting";
 
-const initialDate = formatDateExpenses(new Date());
+const initialDate = formatDate(new Date());
 
 
 export const initialState: ExpensesState = {

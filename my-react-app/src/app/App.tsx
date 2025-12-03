@@ -18,8 +18,7 @@ function App() {
     const fetchData = async () => {
       dispatch(getCurrentUser());
       const { data : authListener } = supabase.auth.onAuthStateChange(
-        async (event, session) => {
-          console.log(`Auth event: ${event}`);
+        async (_, session) => {
             if(session?.user) {
                 dispatch(setUser(session.user))                
             } else {

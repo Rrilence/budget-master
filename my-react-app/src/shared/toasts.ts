@@ -133,16 +133,6 @@ const notifyCreateErrorIncome = () => {
     })
 } 
 
-const notifyNameExpense = () => {
-    toast.success('Введите название на русском языке', {
-        toastId: '003',
-        position: "top-right",
-        autoClose: 1500,
-        closeOnClick: true,
-        theme: "light",
-    })
-} 
-
 const notifyUpdateExpense = () => {
     toast.success('Статья расходов редактирована', {
         toastId: '003',
@@ -155,6 +145,36 @@ const notifyUpdateExpense = () => {
 
 const notifyUpdateIncome = () => {
     toast.success('Статья доходов редактирована', {
+        toastId: '003',
+        position: "top-right",
+        autoClose: 1500,
+        closeOnClick: true,
+        theme: "light",
+    })
+} 
+
+const notifyUpdateBudget = () => {
+    toast.success('Бюджет редактирован', {
+        toastId: '003',
+        position: "top-right",
+        autoClose: 1500,
+        closeOnClick: true,
+        theme: "light",
+    })
+} 
+
+const notifyCreateBudget = () => {
+    toast.success('Бюджет успешно создан', {
+        toastId: '003',
+        position: "top-right",
+        autoClose: 1500,
+        closeOnClick: true,
+        theme: "light",
+    })
+}
+
+const notifyCreateErrorBudget = () => {
+    toast.error('Ошибка, бюджет не удалось создать', {
         toastId: '003',
         position: "top-right",
         autoClose: 1500,
@@ -183,6 +203,16 @@ const notifyTransaction = () => {
     })
 } 
 
+const notifyErrorBudget = () => {
+    toast.error('Бюджет с такой категорией и периодом уже существует', {
+        toastId: '003',
+        position: "top-right",
+        autoClose: 1500,
+        closeOnClick: true,
+        theme: "light",
+    })
+} 
+
 export {
     notifySignUp, 
     notifySignUpError, 
@@ -193,7 +223,6 @@ export {
     notifyWeatherCity,
     notifyCreateExpense,
     notifyError,
-    notifyNameExpense,
     notifySignInError,
     notifyCreateErrorExpense,
     notifySignUpError2,
@@ -202,4 +231,9 @@ export {
     notifyCreateErrorIncome, 
     notifyCreateIncome,
     notifyUpdateIncome,
+    notifyCreateBudget,
+    notifyCreateErrorBudget, 
+    notifyUpdateBudget,
+    notifyErrorBudget,
+
 }

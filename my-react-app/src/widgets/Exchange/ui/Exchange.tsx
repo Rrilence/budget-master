@@ -1,33 +1,38 @@
 import { startTransition, useActionState, useEffect, useRef, useState, type Key } from "react"
-import { Button, Input, Space, Table, type InputRef, type TableColumnType } from "antd"
+import { Button, Input, Space, Table, Typography, type InputRef, type TableColumnType } from "antd"
 import { defaultExchange, submitCourse } from "../api"
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from "@ant-design/icons";
 import type { FilterDropdownProps } from "antd/es/table/interface";
 import type { InfoCourse } from "../../../shared/types";
 
-import styles from './styles.module.css'
+import style from './styles.module.css'
+import type { TableProps } from "antd/lib";
+import { useStyles } from "../hooks/useStyles";
+import clsx from "clsx";
+
 
 const Exchange = () => {
+  const { styles } = useStyles();
 
-    const [searchText, setSearchText] = useState('');
-    const [searchedColumn, setSearchedColumn] = useState('');
-    const searchInput = useRef<InputRef>(null);
+  const [searchText, setSearchText] = useState('');
+  const [searchedColumn, setSearchedColumn] = useState('');
+  const searchInput = useRef<InputRef>(null);
 
-    const [courseState, dispatch] = useActionState(submitCourse, defaultExchange)
+  const [courseState, dispatch] = useActionState(submitCourse, defaultExchange)
     
-    const dataSource = courseState.data.map((item) => (
-        {
-            key: item.ID,
-            code: item.CharCode,
-            name: item.Name,
-            value: item.Value,
-        }
-    ))
+  const dataSource = courseState.data.map((item) => (
+    {
+      key: item.ID,
+      code: item.CharCode,
+      name: item.Name,
+      value: item.Value,
+    }
+  ))
 
-    type DataIndex = keyof InfoCourse;
+  type DataIndex = keyof InfoCourse;
 
-    const handleSearch = (
+  const handleSearch = (
     selectedKeys: string[],
     confirm: FilterDropdownProps['confirm'],
     dataIndex: DataIndex,
@@ -86,30 +91,37 @@ const Exchange = () => {
         />
       ) : ( text ),
   });
-    
-    const columns = [
-        {title: 'Код', dataIndex: 'code'},
-        {title: 'Название',
-        dataIndex: 'name',
-        ...getColumnSearchProps('name')
-        },
-        {title: 'Курс', dataIndex: 'value'},
-    ]
 
+  const columns: TableProps<InfoCourse>['columns'] = [
+    {title: 'Код', dataIndex: 'code'},
+    {title: 'Название',
+    dataIndex: 'name',
+    ...getColumnSearchProps('name')
+    },
+    {title: 'Курс', dataIndex: 'value'},
+  ]
 
-    useEffect(() => {
-        startTransition(() => dispatch())
-    }, [])
+  useEffect(() => {
+    startTransition(() => dispatch())
+  }, [])
 
-    return (
-            <div className={styles.container}>
-                <h3 className={styles.title}>Курсы валют ЦБ РФ</h3>
-              <div className={styles.update}>
-                <p>Обновлено:</p>
+  return (
+    <div className={style.container}>
+          <Table
+          dataSource={dataSource} 
+          columns={columns} 
+          className={styles.root}
+          title={() => 
+            <Typography.Title level={4} className={clsx(styles.title, style.title)}>
+              Курсы валют ЦБ РФ
+              <div className={style.update}>
+                <p style={{marginBottom: 0}}>Обновлено:</p>
                 <p>{courseState.dateExchange}</p>
               </div>
-                <Table dataSource={dataSource} columns={columns} />
-            </div>
+          </Typography.Title>}
+          />
+
+     </div>
     )
 
 }

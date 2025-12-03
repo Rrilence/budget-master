@@ -10,6 +10,7 @@ interface AntProps {
     children: React.ReactNode
 }
 
+const { defaultAlgorithm, darkAlgorithm } = theme;
 
 const AntProvider = ({children}: AntProps) => {
 
@@ -40,15 +41,14 @@ const AntProvider = ({children}: AntProps) => {
                     inputFontSize: 16
                     },
                     Layout: {
-                    bodyBg: "rgba(162,170,207,0.1)"
+                        bodyBg: "rgba(123, 128, 157, 0.1)",
                     },
                     Typography: {
                     "colorTextHeading": "#030852",
-                    }
+                    },
                 },
-                algorithm: (isTheme === 'light' ? theme.defaultAlgorithm : theme.darkAlgorithm)
+                algorithm: (isTheme === 'light' ? defaultAlgorithm : darkAlgorithm)
                 }}
-
         >
             {children}
         </ConfigProvider>

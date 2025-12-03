@@ -1,4 +1,7 @@
 import dayjs from 'dayjs';
+import isoWeek from 'dayjs/plugin/isoWeek';
+
+dayjs.extend(isoWeek);
 
 const formatDateWeather = (date: Date) => {
     const options: Intl.DateTimeFormatOptions = {
@@ -27,8 +30,6 @@ const formatWeekDayWeather = (day: number) => {
     return formatter.format(date);
 }
 
-
-
 const formatTimeWeather = (date: number) => {
     const time = new Date(date * 1000);
     const hours = time.getHours().toString();
@@ -49,17 +50,17 @@ const formatDateExchange = (dateExchange: string) => {
   return `${day}.${month}.${year} ${hours}:${minutes}`;
 }
 
-// const formatDateExpenses = (date: Date) => {
-//   const day = String(date.getDate()).padStart(2, '0');
-//   const month = String(date.getMonth() + 1).padStart(2, '0'); 
-//   const year = date.getFullYear();
-
-//   return `${day}.${month}.${year}`;
-// }
-
-const formatDateExpenses = (date: Date) => {
+const formatDate = (date: Date) => {
   return dayjs(date).format('DD.MM.YYYY'); 
 }
+
+const formatWeek = (dateWeek: string) => {
+    const [year, week] = dateWeek.split('-').map(Number);
+    const firstDayOfYear = dayjs().year(year).startOf('year');
+    const monday = firstDayOfYear.isoWeek(week).startOf('isoWeek');
+    return monday
+}
+
 
 export {
     formatDateWeather,
@@ -67,6 +68,6 @@ export {
     formatWeekDayWeather,
     formatTimeWeather,
     formatDateExchange,
-    formatDateExpenses,
-
+    formatDate,
+    formatWeek,
 }

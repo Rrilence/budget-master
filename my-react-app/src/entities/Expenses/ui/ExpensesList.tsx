@@ -5,15 +5,17 @@ import 'dayjs/locale/ru';
 import { useDispatch, useSelector } from "react-redux";
 import { selectExpenses, selectIsOpenModal, setExpenses, setinitialValues, setIsOpenModal, setIsUpdateExpense } from "../expenses-slice";
 import { CarFilled, CoffeeOutlined, GiftFilled, GlobalOutlined, HeartFilled, HomeFilled, LoadingOutlined, MedicineBoxFilled, QqOutlined, ShoppingCartOutlined, SkinFilled, SmileFilled, TruckFilled, WifiOutlined } from "@ant-design/icons";
-import styles from './styles.module.css'
 import { useState } from "react";
 import { notifyTransaction } from "../../../shared/toasts";
 import { deleteExpenses } from "../api/deleteExpense";
 import ModalExpenses from "./ModalExpenses";
+import style from './styles.module.css'
+import { useStyles } from "../../../widgets/Exchange/hooks/useStyles";
 
 dayjs.locale('ru');
 
 const ExpensesList = () => {
+  const { styles } = useStyles();
 
 const dispatch = useDispatch();
 const dateFormat = 'DD.MM.YYYY';
@@ -23,20 +25,20 @@ const [expandedRowKeys, setExpandedRowKeys] = useState<string[]>([]);
 
 const getCategoryIcon = (category: string) => {
     switch (category) {
-      case 'дом': return <HomeFilled className={styles.icon} style={{ color: '#cc1616ff'}} />;
-      case 'продукты': return <ShoppingCartOutlined className={styles.icon} style={{ color: '#2656e9ff' }} />;
-      case 'здоровье': return <MedicineBoxFilled className={styles.icon} style={{ color: '#14bc14ff' }} />;
-      case 'одежда': return <SkinFilled className={styles.icon} style={{ color: '#7a068fff' }} />;
-      case 'транспорт': return <TruckFilled className={styles.icon} style={{ color: '#e07314ff' }} />;
-      case 'спорт': return <HeartFilled className={styles.icon} style={{ color: '#25eeb2ff' }} />;
-      case 'досуг': return <SmileFilled className={styles.icon} style={{ color: '#e7f73aff' }} />;
-      case 'путешествия': return <GlobalOutlined className={styles.icon} style={{ color: 'rgba(63, 175, 236, 1)' }} />;
-      case 'машина': return <CarFilled className={styles.icon} style={{ color: '#9025eeff' }} />;
-      case 'кафе': return <CoffeeOutlined className={styles.icon} style={{ color: '#6a390fff' }} />;
-      case 'связь': return <WifiOutlined className={styles.icon} style={{ color: '#96e319ff' }} />;
-      case 'домашние животные': return <QqOutlined className={styles.icon} style={{ color: '#281c13ff'  }} />;
-      case 'подарки': return <GiftFilled className={styles.icon} style={{ color: '#c828aaff' }} />;
-      default: return <LoadingOutlined className={styles.icon} style={{ color: '#5aececff' }} />;
+      case 'Дом': return <HomeFilled className={style.icon} style={{ color: '#cc1616ff'}} />;
+      case 'Продукты': return <ShoppingCartOutlined className={style.icon} style={{ color: '#2656e9ff' }} />;
+      case 'Здоровье': return <MedicineBoxFilled className={style.icon} style={{ color: '#14bc14ff' }} />;
+      case 'Одежда': return <SkinFilled className={style.icon} style={{ color: '#7a068fff' }} />;
+      case 'Транспорт': return <TruckFilled className={style.icon} style={{ color: '#e07314ff' }} />;
+      case 'Спорт': return <HeartFilled className={style.icon} style={{ color: '#25eeb2ff' }} />;
+      case 'Досуг': return <SmileFilled className={style.icon} style={{ color: '#e7f73aff' }} />;
+      case 'Путешествия': return <GlobalOutlined className={style.icon} style={{ color: 'rgba(63, 175, 236, 1)' }} />;
+      case 'Машина': return <CarFilled className={style.icon} style={{ color: '#9025eeff' }} />;
+      case 'Кафе': return <CoffeeOutlined className={style.icon} style={{ color: '#6a390fff' }} />;
+      case 'Связь': return <WifiOutlined className={style.icon} style={{ color: '#96e319ff' }} />;
+      case 'Домашние животные': return <QqOutlined className={style.icon} style={{ color: '#281c13ff'  }} />;
+      case 'Подарки': return <GiftFilled className={style.icon} style={{ color: '#c828aaff' }} />;
+      default: return <LoadingOutlined className={style.icon} style={{ color: '#5aececff' }} />;
     }
   };
 
@@ -49,8 +51,8 @@ const columns: TableColumnsType<InfoExpense> = [
             <Flex>
                 {getCategoryIcon(record.category)}
                 <div>
-                    <p className={styles.name}>{record.name}</p>
-                    <p className={styles.category}>{record.category}</p>
+                    <p className={style.name}>{record.name}</p>
+                    <p className={style.category}>{record.category}</p>
                 </div>
             </Flex>
             ),
@@ -173,6 +175,7 @@ const columns: TableColumnsType<InfoExpense> = [
             <Table
                 columns={columns}
                 dataSource={expenses}
+                className={styles.root}
                 rowKey={(record) => record.id!}
                 scroll={{ x: 'max-content' }}
                 expandable={{

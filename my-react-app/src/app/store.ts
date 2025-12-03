@@ -5,6 +5,7 @@ import { sidebarReducer } from "../entities/Sidebar/sidebar-slice";
 import { headerMenuReducer } from "../entities/headerMenu-slice";
 import { expensesReducer } from "../entities/Expenses/expenses-slice";
 import { incomesReducer } from "../entities/Incomes/incomes-slice";
+import { budgetsReducer } from "../entities/Budget/budget-slice";
 
 
 export const store = configureStore({
@@ -15,6 +16,7 @@ export const store = configureStore({
         headerMenu: headerMenuReducer,
         expenses: expensesReducer,
         incomes: incomesReducer,
+        budgets: budgetsReducer,
     },
     devTools: true
 })

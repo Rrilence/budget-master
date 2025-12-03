@@ -1,4 +1,5 @@
 import type { User } from "@supabase/supabase-js";
+import dayjs from 'dayjs';
 
 export type CreateActionState = {
     email?: string,
@@ -104,6 +105,18 @@ export interface InfoExpense extends InfoIncome {
   category: string,
 }
 
+export interface InfoBudget {
+  id?: string | undefined,
+  user_id?: string | null | undefined,
+  category: string,
+  amount: number,
+  period: string,
+  dateStart: string,
+  dateEnd: string,
+  dateArr?: [dayjs.Dayjs, dayjs.Dayjs] | undefined,
+  error?: string | null,
+}
+
 type TransactionState = 'Расходы' | 'Доходы';
 
 export interface ExpensesState {
@@ -130,5 +143,23 @@ export interface IncomesState {
     name: string,
     amount: string,
     date: string,
+  }
+}
+
+export interface BudgetState {
+  isModalOpen: boolean,
+  isUpdateBudget: boolean,
+  date: string,
+  period: string,
+  totalAmount: number,
+  budgets: InfoBudget[],
+  initialValues: {
+    id: string,
+    user_id: string,
+    category: string,
+    amount: string,
+    period: string,
+    dateStart?: string,
+    dateArr: string[],
   }
 }

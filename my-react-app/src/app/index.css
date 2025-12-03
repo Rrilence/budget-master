@@ -123,6 +123,22 @@ aside {
     border-bottom: 2px solid rgba(3, 3, 84, 0);
 }
 
+.ant-table-title {
+    padding: 0 !important;
+}
+
+.ant-pagination {
+    padding: 0 10px;
+}
+
+.slick-dots li {
+    display: none !important;
+}
+
+.slick-arrow {
+    color: #33c2cc !important;
+}
+
 
 @media (min-width: 500px) {
     .form {

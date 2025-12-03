@@ -1,16 +1,17 @@
-import { Button, DatePicker, Form, Input, InputNumber, Modal } from "antd";
+import { Button, DatePicker, Flex, Form, Input, InputNumber, Modal } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { initialState, selectIncomes, selectInitialValues, selectIsUpdateIncome, setIncomes, setinitialValues, setIsUpdateIncome } from "../incomes-slice";
 import { selectUser } from "../../auth-slice";
 import { startTransition, useActionState, useCallback, useState } from "react";
 import type { InfoIncome } from "../../../shared/types";
 import { type FormProps } from "antd/lib";
-import { notifyNameExpense } from "../../../shared/toasts";
+import { notifyName } from "../../../shared/toasts";
 import { regExpression } from "../../../shared/validation";
 import dayjs from 'dayjs';
 import { createIncomes, defaultState } from "../api/createIncomes";
 import { updateIncome } from "../api/updateIncome";
 import { selectIsOpenModal, selectTransactions, setIsOpenModal } from "../../Expenses/expenses-slice";
+import styles from './styles.module.css'
 
 
 const ModalIncomes = () => {
@@ -78,7 +79,7 @@ const ModalIncomes = () => {
     const handleNameChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
         let newName = event.target.value;
         if(!regExpression.test(newName.trim())) {
-            notifyNameExpense();
+            notifyName();
             setName('')
         } else {
             newName = newName[0].toUpperCase() + newName.slice(1);
@@ -112,13 +113,14 @@ const ModalIncomes = () => {
             loading={isPending}>{isUpdateIncome ? 'Редактировать' : 'Добавить'}
             </Button>
             }
-        style={{maxWidth: 400}}>
+        className={styles.modal}>
             <Form
                 form={form}
                 autoComplete="off"
                 initialValues={{...initialValues, date: initialValues.date ? dayjs(initialValues.date, 'DD.MM.YYYY') : null }} 
                 onFinish={onFinish}>
                 <Form.Item 
+                layout="vertical"
                 name="name" 
                 label="Название: " 
                 required
@@ -127,21 +129,25 @@ const ModalIncomes = () => {
                     value={name}
                     onChange={handleNameChange}/>
                 </Form.Item>
-                <Form.Item 
+                <Flex justify="space-around">
+                    <Form.Item 
+                    layout="vertical"
                     name="amount" 
                     label="Сумма: " 
                     required
                     style={{ marginBottom: '10px' }}>
-                    <InputNumber
-                        precision={2}
-                        placeholder="0.00"
-                    />
-                </Form.Item>
-                <Form.Item name="date" label="Дата: " style={{ marginBottom: '10px' }}>
-                    <DatePicker
-                        format={dateFormatList}
-                        required/>
-                </Form.Item>
+                        <InputNumber
+                            precision={2}
+                            placeholder="0.00"
+                            style={{width: 150}}
+                        />
+                    </Form.Item>
+                    <Form.Item layout="vertical" name="date" label="Дата: " style={{ marginBottom: '10px' }}>
+                        <DatePicker
+                            format={dateFormatList}
+                            required/>
+                    </Form.Item>
+                </Flex>
             </Form>
             {state!.error && <div>{state!.error}</div>}
         </Modal>  

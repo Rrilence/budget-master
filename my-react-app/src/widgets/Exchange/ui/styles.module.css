@@ -1,10 +1,10 @@
 .container {
-    margin: 20px auto 5px;
-    max-width: 470px;
+    margin: 30px auto 5px;
+    max-width: 570px;
 }
 
 .title {
-    font-size: 15px;
+    font-size: 18px !important;
     text-align: center;
     margin-bottom: 5px;
 }
@@ -20,7 +20,7 @@
 
 @media (min-width: 720px) {
     .title {
-        font-size: 17px;
+        font-size: 20px !important;
     }
 
  }
