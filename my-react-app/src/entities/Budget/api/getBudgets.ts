@@ -5,7 +5,7 @@ export const getBudgets = async(user: User) => {
 
     const { data, error  } = await supabase
       .from('budgets')
-      .select('id, user_id, category, amount, dateStart, dateEnd, period')
+      .select('id, user_id, category, amount, dateStart, dateEnd, period, description')
       if (error) {throw error}
                 if(data) {
                     const dataUser = data.filter((item) => item.user_id === user.id)

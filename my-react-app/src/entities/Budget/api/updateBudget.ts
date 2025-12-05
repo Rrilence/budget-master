@@ -7,6 +7,7 @@ export const updateBudgets = async(id: string, user_id: string, values: InfoBudg
             const amount = values.amount;
             const dateStart = values.dateStart;
             const dateEnd = values.dateEnd;
+            const description = values.description;
  
         try {
             const { data, error  } = await supabase
@@ -16,7 +17,8 @@ export const updateBudgets = async(id: string, user_id: string, values: InfoBudg
                     category,
                     amount,
                     dateStart,
-                    dateEnd
+                    dateEnd,
+                    description,
                 },
                 ])
             .eq('id', id)

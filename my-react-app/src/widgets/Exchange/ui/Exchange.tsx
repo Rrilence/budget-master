@@ -112,8 +112,8 @@ const Exchange = () => {
           columns={columns} 
           className={styles.root}
           title={() => 
-            <Typography.Title level={4} className={clsx(styles.title, style.title)}>
-              Курсы валют ЦБ РФ
+            <Typography.Title level={4} className={styles.title} style={{height: 102, color: 'white'}}>
+              <p className={style.title}>Курсы валют ЦБ РФ</p>
               <div className={style.update}>
                 <p style={{marginBottom: 0}}>Обновлено:</p>
                 <p>{courseState.dateExchange}</p>

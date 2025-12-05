@@ -1,10 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
-// import { formatDate } from "../../shared/formatting";
 import type { RootState } from "../../app/store";
 import type { BudgetState } from "../../shared/types";
 
-
-// const initialDate = formatDate(new Date());
 
 export const initialState: BudgetState = {
     isModalOpen: false,
@@ -21,6 +18,7 @@ export const initialState: BudgetState = {
         period: '',
         dateStart: '',
         dateArr: [],
+        description: '',
     }
 }
 
@@ -59,10 +57,10 @@ export const {setIsOpenModal, setIsUpdateBudget, setDate, setPeriod, setTotalAmo
 export const budgetsReducer = budgetsSlice.reducer;
 
 export const selectIsOpenModal = (state: RootState) => state.budgets.isModalOpen;
+export const selectIsUpdateBudget = (state: RootState) => state.budgets.isUpdateBudget;
 export const selectBudgets = (state: RootState) => state.budgets.budgets;
 export const selectPeriod = (state: RootState) => state.budgets.period;
 export const selectDate = (state: RootState) => state.budgets.date;
 export const selectTotalAmount = (state: RootState) => state.budgets.totalAmount;
 export const selectInitialPeriod = (state: RootState) => state.budgets.initialValues.period;
-export const selectIsUpdateBudget = (state: RootState) => state.budgets.isUpdateBudget;
 export const selectInitialValues = (state: RootState) => state.budgets.initialValues;

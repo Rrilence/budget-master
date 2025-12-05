@@ -1,6 +1,7 @@
 .wrapper {
     width: 250px;
-    margin: 10px auto;
+    margin: 0px auto 10px;
+    padding-top: 20px;
 }
 
 .flex {
@@ -13,3 +14,9 @@
 .button_menu {
     margin-right: 5px !important;
 }
+
+.demoline {
+    background-color: rgb(229, 250, 255);
+    border-radius: 10px;
+}
+

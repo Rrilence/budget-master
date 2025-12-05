@@ -114,6 +114,7 @@ export interface InfoBudget {
   dateStart: string,
   dateEnd: string,
   dateArr?: [dayjs.Dayjs, dayjs.Dayjs] | undefined,
+  description?: string,
   error?: string | null,
 }
 
@@ -161,5 +162,6 @@ export interface BudgetState {
     period: string,
     dateStart?: string,
     dateArr: string[],
+    description?: string,
   }
 }

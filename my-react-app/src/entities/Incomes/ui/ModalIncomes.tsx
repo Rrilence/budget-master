@@ -137,9 +137,10 @@ const ModalIncomes = () => {
                     required
                     style={{ marginBottom: '10px' }}>
                         <InputNumber
-                            precision={2}
-                            placeholder="0.00"
-                            style={{width: 150}}
+                        min={0}
+                        precision={2}
+                        placeholder="0.00"
+                        style={{width: 150}}
                         />
                     </Form.Item>
                     <Form.Item layout="vertical" name="date" label="Дата: " style={{ marginBottom: '10px' }}>

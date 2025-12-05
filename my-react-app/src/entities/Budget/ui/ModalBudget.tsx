@@ -1,4 +1,4 @@
-import { Button, DatePicker, Form, InputNumber, Modal, Select, type FormProps } from "antd"
+import { Button, Input, DatePicker, Form, InputNumber, Modal, Select, type FormProps } from "antd"
 import { useDispatch, useSelector } from "react-redux";
 import { initialState, selectBudgets, selectInitialValues, selectIsOpenModal, selectIsUpdateBudget, setBudgets, setinitialValues, setIsOpenModal, setIsUpdateBudget, setInitialPeriod, selectInitialPeriod } from "../budget-slice";
 import dayjs from 'dayjs';
@@ -11,6 +11,8 @@ import { createBudget, defaultState } from "../api/createBudget";
 import { updateBudgets } from "../api/updateBudget";
 import { notifyErrorBudget } from "../../../shared/toasts";
 import { formatWeek } from "../../../shared/formatting";
+
+const { TextArea } = Input;
 
 const { RangePicker } = DatePicker;
 
@@ -163,7 +165,7 @@ const ModalBudget = () => {
 
     return (
         <Modal
-        title="Детали бюджета"
+        title="Бюджет"
         closable={{ 'aria-label': 'Custom Close Button' }}
         open={isOpenModal}
         onCancel={onCancel}
@@ -192,15 +194,16 @@ const ModalBudget = () => {
             onFinish={onFinish}>
                     <CategorySelect/>
                 <Form.Item 
-                    name="amount" 
-                    layout="vertical"
-                    label="Лимит, руб: " 
-                    required
-                    style={{ marginBottom: '10px' }}>
+                name="amount" 
+                layout="vertical"
+                label="Лимит, руб: " 
+                required
+                style={{ marginBottom: '10px' }}>
                     <InputNumber
-                        precision={2}
-                        placeholder="0.00"
-                        style={{width: '100%'}}
+                    min={0}
+                    precision={2}
+                    placeholder="0.00"
+                    style={{width: '100%'}}
                     />
                 </Form.Item>
                 <Form.Item name="period" layout="vertical" label="Выберите период: " required>
@@ -282,6 +285,9 @@ const ModalBudget = () => {
                         </Form.Item>
                     )
                     }
+                <Form.Item name="description" layout="vertical" label="Комментарий: ">
+                     <TextArea rows={2} />
+                </Form.Item>
             </Form>
             {state!.error && <div>{state!.error}</div>}
         </Modal>

@@ -138,6 +138,7 @@ const ModalExpenses = () => {
                         required
                         style={{ marginBottom: '10px'}}>
                         <InputNumber
+                            min={0}
                             precision={2}
                             placeholder="0.00"
                             style={{width: 150}}

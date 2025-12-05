@@ -15,6 +15,9 @@ import { notifyError } from "../../../shared/toasts";
 import { getExpenses } from "../../../entities/Expenses/api/getExpenses";
 import { setExpenses } from "../../../entities/Expenses/expenses-slice";
 import BudgetList from "../../../entities/Budget/ui/BudgetsList";
+import { Content } from "antd/es/layout/layout";
+import { selectTheme } from "../../../entities/Theme/theme-slice";
+import clsx from "clsx";
 
 const {Text} = Typography
 
@@ -23,6 +26,7 @@ const Budget = () => {
     const isOpenModal = useSelector(selectIsOpenModal);
     const user = useSelector(selectUser);
     const totalAmount = useSelector(selectTotalAmount);
+    const theme = useSelector(selectTheme);
 
     const showModal = () => {
             dispatch(setIsOpenModal(true))
@@ -46,7 +50,8 @@ const Budget = () => {
     }, [dispatch, user])
 
     return (
-           <>
+           <Content className={`${theme === 'light' ? 'light' : 'dark'}`}
+           style={{minHeight: 620}}>
            <BudgetSegment/>
            <Flex justify="center" align="center" gap={15} style={{marginTop: 25}}>
              <Image width={100} alt="budget" src={budget}/>
@@ -60,7 +65,7 @@ const Budget = () => {
            <Flex 
            justify="center"
            align="center"
-           className={styles.footer}>
+           className={clsx(styles.footer, `${theme === 'light' ? 'light' : 'dark'}`)}>
                 <Button
                 type="primary"
                 icon={<PlusCircleOutlined />} 
@@ -68,7 +73,7 @@ const Budget = () => {
                 > Добавить бюджет
                 </Button>
            </Flex>
-           </>
+           </Content>
     )
 }
 

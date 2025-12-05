@@ -32,7 +32,6 @@ const AntProvider = ({children}: AntProps) => {
                     paddingInline: 4,
                     defaultColor: "rgb(6,17,120)",
                     defaultBorderColor: "rgb(6,17,120)",
-                    textTextColor: "rgba(238, 251, 238, 1)",
                     textTextActiveColor: "rgb(37,19,195)",
                     textTextHoverColor: "rgb(238,240,251)",
                     colorBgTextActive: "rgba(255,255,255,0.62)"
@@ -44,7 +43,7 @@ const AntProvider = ({children}: AntProps) => {
                         bodyBg: "rgba(123, 128, 157, 0.1)",
                     },
                     Typography: {
-                    "colorTextHeading": "#030852",
+                    colorTextHeading: "#030852",
                     },
                 },
                 algorithm: (isTheme === 'light' ? defaultAlgorithm : darkAlgorithm)

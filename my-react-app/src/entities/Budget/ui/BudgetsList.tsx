@@ -1,21 +1,16 @@
 import { useDispatch, useSelector } from "react-redux"
-import { selectBudgets, selectDate, selectPeriod, selectTotalAmount, setBudgets, setinitialValues, setIsOpenModal, setIsUpdateBudget, setTotalAmount } from "../budget-slice"
+import { selectBudgets, selectDate, selectPeriod, setBudgets, setTotalAmount } from "../budget-slice"
 import { Button, Dropdown, Flex, Progress } from "antd";
 import { selectExpenses } from "../../Expenses/expenses-slice";
 import { useEffect, useMemo, useState } from "react";
-import DemoLine from "./DemoLine";
-import { DeleteOutlined, EllipsisOutlined, SignatureOutlined } from "@ant-design/icons";
+import { AlignCenterOutlined, DeleteOutlined, FileSearchOutlined } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import styles from './styles.module.css'
 import { deleteBudgets } from "../api/deleteBudget";
 import type { MenuInfo } from "rc-menu/lib/interface";
 import type { InfoBudget } from "../../../shared/types";
-import dayjs from 'dayjs';
 import { dateValidate } from "../../../shared/validation";
-
-interface Addition {
-    [category: string]: boolean;
-}
+import BudgetDescription from "./BudgetDescription";
 
 const BudgetList = () => {
 
@@ -24,16 +19,9 @@ const BudgetList = () => {
     const expenses = useSelector(selectExpenses);
     const period = useSelector(selectPeriod);
     const dateDay = useSelector(selectDate);
-
-    const [addition, setAddition] = useState<Addition>({});
+    
     const [filteredBudgets, setFilteredBudgets] = useState<InfoBudget[]>(budgets);
-
-    const toggleAddition = (category: string) => {
-        setAddition(prevState => ({
-            ...prevState,
-            [category]: !prevState[category]
-        }));
-    };
+    const [openBudgetId, setOpenBudgetId] = useState<string | null>(null);
 
     const expensesByCategory = useMemo(() => {
         const result: { [key: string]: { [key: string]: number } } = {}
@@ -60,26 +48,12 @@ const BudgetList = () => {
         return result
     }, [budgets, expenses])
 
-   const dateFormat = 'DD.MM.YYYY';
-
     const handleMenuClick: (info: MenuInfo, budget: InfoBudget) => void = (info, budget) => {
         if(info.key === '1') {
             if(budget.id && budget.user_id) {  
-                dispatch(setIsUpdateBudget(true)); 
-                dispatch(setIsOpenModal(true));
-                dispatch(setinitialValues({
-                id: budget.id,
-                user_id: budget.user_id,
-                category: budget.category,
-                amount: budget.amount,
-                period: budget.period,
-                dateStart: dayjs(budget.dateStart, dateFormat).format(dateFormat),
-                dateArr: [dayjs(budget.dateStart, dateFormat).toString(),
-                dayjs(budget.dateEnd, dateFormat).toString()],
-                }));
+                setOpenBudgetId(budget.id);
             }
         }
-        
         if(info.key === '2') {
             deleteBudgets(budget.id!, budget.user_id!)
             .then(() => {
@@ -91,9 +65,9 @@ const BudgetList = () => {
 
     const items: MenuProps['items'] = [
     {
-        label: 'Редактировать',
+        label: 'Детали',
         key: '1',
-        icon: <SignatureOutlined />,
+        icon: <FileSearchOutlined />,
     },
     {
         label: 'Удалить',
@@ -148,7 +122,9 @@ const BudgetList = () => {
     }, [budgets, period, dateDay, dispatch])
 
     return (
-        <Flex justify="center" gap={30} wrap style={{margin: '30px 0 100px 30px'}}>
+        <Flex
+        justify="center" gap={30} wrap 
+        style={{margin: '30px 0 60px 30px', paddingBottom: 50}}>
             {filteredBudgets.map((budget) => {
                 const spentAmount = expensesByCategory[budget.id!]?.[budget.category] || 0;
             return (
@@ -157,7 +133,6 @@ const BudgetList = () => {
                 vertical
                 align="start"
                 style={{width: 300}}
-                onClick={() => toggleAddition(budget.category)}
                 >
                     <Flex justify="space-between" style={{width: '100%'}}>
                         <div>
@@ -165,8 +140,13 @@ const BudgetList = () => {
                             <p>{budget.amount} руб.</p>
                         </div>
                         <Dropdown menu={menuProps(budget)} placement="bottomRight" className={styles.button_menu} >
-                            <Button type="text" icon={<EllipsisOutlined rotate={90}/>} />
+                            <Button type="text" icon={<AlignCenterOutlined />} style={{textShadow: '0px 0px 3px rgba(255, 255, 255, 1)'}} />
                         </Dropdown>
+                        <BudgetDescription 
+                        budget={budget}
+                        isOpen={openBudgetId === budget.id}
+                        onClose={() => setOpenBudgetId(null)}
+                        />
                     </Flex>
                     <Progress
                         percentPosition={{align: 'end', type: 'outer' }}
@@ -199,7 +179,6 @@ const BudgetList = () => {
                     ? <span style={{marginBottom: 15}}>Потрачено: {spentAmount || 0} руб.</span>
                     : <span style={{marginBottom: 15, color: 'red'}}>Перерасход: {budget.amount - spentAmount || 0} руб.</span>
                     }
-                    {addition[budget.category] && <DemoLine category={budget.category} dateStart={budget.dateStart} dateEnd={budget.dateEnd}/>}
                 </Flex>
             ) 
             })}
