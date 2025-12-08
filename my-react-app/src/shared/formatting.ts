@@ -61,6 +61,13 @@ const formatWeek = (dateWeek: string) => {
     return monday
 }
 
+const formatAmount = (number: number) => {
+  return new Intl.NumberFormat('ru-RU', {
+    style: 'decimal',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(number) + ' руб.';
+};
 
 export {
     formatDateWeather,
@@ -70,4 +77,6 @@ export {
     formatDateExchange,
     formatDate,
     formatWeek,
+    formatAmount, 
+
 }

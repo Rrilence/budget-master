@@ -24,7 +24,8 @@ export const AppRouter = () => {
         <Routes>
             <Route path="/welcome" index element={<StartPage/>}/>
                 <Route element={<PrivateRoute redirectTo="/welcome" />}>
-                    <Route path="/" element={<LayoutWidget/>}>
+                    <Route path="/"  element={<LayoutWidget/> }>
+                    <Route index element={<DashBoard />} />
                     <Route path="dashboard" element={<DashBoard/>}/>
                     <Route path="budget" element={<Budget/>}/>
                     <Route path="transactions" element={<Transactions/>}/>
