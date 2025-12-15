@@ -135,7 +135,7 @@ useEffect(() => {
     layout: 'vertical',
     shapeField: 'column25D',
     style: {
-      fill: (d) => {
+      fill: (d: { groupKey: 'Доходы' | 'Расходы'; type: string }) => {
         if (d.groupKey === 'Доходы') return '#64DAAB';
         return '#6395FA';
       },
