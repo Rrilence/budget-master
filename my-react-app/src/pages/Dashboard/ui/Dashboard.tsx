@@ -1,8 +1,8 @@
 import { useDispatch, useSelector } from "react-redux"
 import { selectExpenses, setExpenses } from "../../../entities/Expenses/expenses-slice";
 import { selectIncomes, setIncomes } from "../../../entities/Incomes/incomes-slice";
-import { useEffect, useState } from "react";
-import { Flex, Progress, Space, Typography } from "antd";
+import { useEffect, useMemo, useState } from "react";
+import { Badge, Col, Flex, Progress, Row, Typography, notification } from "antd";
 import { formatAmount } from "../../../shared/formatting";
 import { selectUser } from "../../../entities/auth-slice";
 import { getExpenses } from "../../../entities/Expenses/api/getExpenses";
@@ -13,57 +13,106 @@ import styles from './styles.module.css'
 import clsx from "clsx";
 import DashChart from "../../../entities/Dashboard/DashChart";
 import ExpenseIncome from "../../../entities/Dashboard/ExpenseIncome/ExpenseIncome";
+import { selectWindowWidth, setWindowWidth } from "../../../entities/windoWidth-slice";
+import DashTransactions from "../../../entities/Dashboard/DashTransactions";
+import { BellOutlined } from "@ant-design/icons";
+import { selectBudgets, setBudgets } from "../../../entities/Budget/budget-slice";
+import { getBudgets } from "../../../entities/Budget/api/getBudgets";
+import useBudget from "../../../shared/useBudget";
 
 const {Text} = Typography
+
+type Exceed = string;
+type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
 
 const DashBoard = () => {
 
+    const [api, contextHolder] = notification.useNotification()
     const dispatch = useDispatch();
     const expenses = useSelector(selectExpenses);
     const incomes = useSelector(selectIncomes);
+    const budgets = useSelector(selectBudgets);
     const user = useSelector(selectUser);
-    const theme = useSelector(selectTheme)
+    const windowWidth = useSelector(selectWindowWidth);
+    const theme = useSelector(selectTheme);
+    const expensesByCategory = useBudget(budgets, expenses);
 
     const [balance, setBalance] = useState(0);
     const [expense, setExpense] = useState(0);
     const [income, setIncome] = useState(0);
+    const [exceedBudget, setExceedBudget] = useState<Exceed[]>([]);
+    const [isDesktop, setIsDesktop] = useState(false); 
 
-    
+    const openNotificationWithIcon = (type: NotificationType) => {
+        exceedBudget.forEach(item => {
+            api[type]({
+              message: 'Внимание!',
+              description: `Превышен запланированный бюджет по категории ${item}`,
+            });
+        })
+    };  
 
     useEffect(() => {
-        const initialStateExpenses = async () => {
+        const initialState = async () => {
             try {if(!user) {throw Error}
-            const data = await getExpenses(user);
-                dispatch(setExpenses(data));
+            const [expenses, incomes, budgets] = await Promise.all([
+                    getExpenses(user),
+                    getIncomes(user),
+                    getBudgets(user)
+                ]);
+            dispatch(setExpenses(expenses));
+            dispatch(setIncomes( incomes));
+            dispatch(setBudgets(budgets));
             } catch (error) {
             console.error('Ошибка при загрузке данных', error);
             notifyError();
             return []
-        }}
-        const initialStateIncomes = async () => {
-            try {const data = await getIncomes(user!);
-                dispatch(setIncomes(data));
-            } catch (error) {
-            console.error('Ошибка при загрузке данных', error);
-            notifyError();
-            return []
-        }}
-
-        initialStateExpenses()
-        initialStateIncomes()
+        }};
+        initialState();
     }, [dispatch, user]);
+
+    const financialData = useMemo(() => {
+    const sumExpenses = expenses.reduce((acc, expense) => acc + expense.amount, 0);
+    const sumIncomes = incomes.reduce((acc, income) => acc + income.amount, 0);
     
-    useEffect(() => {
-        const calcBalance = () => {
-            const sumExpenses = expenses.reduce((acc, expense) => acc + expense.amount, 0);
-            const sumIncomes = incomes.reduce((acc, income) => acc + income.amount, 0);
-            setExpense(sumExpenses);
-            setIncome(sumIncomes);
-            setBalance(sumIncomes - sumExpenses);
+    const exceeded = budgets.reduce<string[]>((acc, budget) => {
+        const spentAmount = expensesByCategory[budget.id!]?.[budget.category] || 0;
+        if (spentAmount > budget.amount && !acc.includes(budget.category)) {
+            acc.push(budget.category);
         }
-        calcBalance()
-    }, [expenses, incomes])
+        return acc;
+    }, []);
+    
+    return {
+        expense: sumExpenses,
+        income: sumIncomes,
+        balance: sumIncomes - sumExpenses,
+        exceedBudget: exceeded,
+    };
+}, [expenses, incomes, budgets, expensesByCategory]);
+
+useEffect(() => {
+    setExpense(financialData.expense);
+    setIncome(financialData.income);
+    setBalance(financialData.balance);
+    setExceedBudget(financialData.exceedBudget);
+}, [financialData]);
+
+
+    useEffect(() => {
+        const handleResize = () => {
+          dispatch(setWindowWidth(window.innerWidth));
+        };
+        window.addEventListener('resize', handleResize);
+        return () => {
+          window.removeEventListener('resize', handleResize);
+        };
+      }, [dispatch]);
+
+    useEffect(() => {
+        setIsDesktop(windowWidth >= 1050);
+    }, [windowWidth])
     
     return (
         <>
@@ -71,24 +120,45 @@ const DashBoard = () => {
         vertical 
         justify="center"
         className={clsx(`${theme === 'light' ? 'light' : 'dark'}`, styles.balance)}>
-        <Text strong style={{fontSize: 20}}>Баланс: {formatAmount(balance)}</Text>
-        <Progress percent={
-            balance > 0 
-            ? Math.round(expense * 100 / income)
-            : 0
-        } 
-        status="active" 
-        strokeColor={{ from: '#f6e81cff', to: '#d06868ff' }} 
-        />
-        <Flex justify="space-between" gap={15} style={{marginBottom: 30}}>
-            <Text>Потрачено: {formatAmount(expense)}</Text>
-            <Text>Общий доход: {formatAmount(income)}</Text> 
-        </Flex>   
-        <Space wrap>
-            <DashChart sumExpenses={expense}/>
-            <ExpenseIncome/>
-        </Space>
-
+            <Badge count={exceedBudget.length} size="small">
+                {contextHolder}
+                <BellOutlined style={{ fontSize: 25}} onClick={() => openNotificationWithIcon('error')}/>
+            </Badge>
+            <Text strong style={{fontSize: 17}}>Баланс: {formatAmount(balance)}</Text>
+            <Progress 
+            percentPosition={{align: 'end', type: 'outer' }}
+            percent={
+                income > 0 
+                ? Math.min(100, Math.round(expense * 100 / income))
+                : 0
+            } 
+            status="active" 
+            strokeColor={{ from: '#f6e81cff', to: '#d06868ff' }} 
+            />
+            <Flex justify="space-between" gap={15} style={{margin: '10px 0 50px'}}>
+                <Text style={{fontSize: 14}}>Потрачено: {formatAmount(expense)}</Text>
+                <Text style={{fontSize: 14}}>Общий доход: {formatAmount(income)}</Text> 
+            </Flex> 
+            { isDesktop ? (
+                <Row>
+                    <Col span={12}>
+                        <DashChart sumExpenses={expense}/>  
+                        <ExpenseIncome/>    
+                    </Col>
+                    <Col span={10} offset={2}>
+                        <DashTransactions/> 
+                    </Col>
+                </Row> 
+                ) : (
+                <Row>
+                    <Col span={24}>
+                        <DashChart sumExpenses={expense}/>
+                        <ExpenseIncome/>   
+                        <DashTransactions/> 
+                    </Col>
+                </Row>
+                )
+            }
         </Flex>
         </>
     )

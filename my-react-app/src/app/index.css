@@ -8,7 +8,8 @@ body {
 }
 
 body[data-theme = 'light'] {
-    background-image: url(../assets/bgLight.jpg);
+    background-image: url(../assets/bgLight.jpg), url(../assets/bgLight-revers.jpg);
+    background-attachment: fixed;
 }
 
 body[data-theme = 'dark'] {
@@ -135,6 +136,10 @@ aside {
 
 .ant-pagination {
     padding: 0 10px;
+}
+
+.ant-badge {
+    margin: 10px 20px 10px auto;
 }
 
 .slick-dots li {

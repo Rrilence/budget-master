@@ -17,6 +17,7 @@ import { useLocation } from "../Weather/hooks/useLocation"
 import type { PayloadAction, ThunkDispatch } from "@reduxjs/toolkit"
 import type { RootState } from "../../app/store"
 import DateCalendar from "../DateCalendar/DateCalendar"
+import { selectWindowWidth, setWindowWidth } from "../../entities/windoWidth-slice"
 
 const { Header, Content, Sider } = Layout;
 
@@ -24,6 +25,7 @@ const LayoutWidget = () => {
     const dispatch = useDispatch(); 
     const theme = useSelector(selectTheme);
     const isDate = useSelector(selectIsDate);
+    const windowWidth = useSelector(selectWindowWidth);
     const isWeather = useSelector(selectIsWeather);
     const isExchange = useSelector(selectIsExchange);
     const isMain = useSelector(selectIsMain);
@@ -66,17 +68,16 @@ const LayoutWidget = () => {
     ]
     
     const [isShowMenu, setIsShowMenu] = useState(typeof window !== 'undefined' ? window.innerWidth >= 768 : true);
-    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
     useEffect(() => {
         const handleResize = () => {
-      setWindowWidth(window.innerWidth);
+        dispatch(setWindowWidth(window.innerWidth));
     };
     window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-    }, [])
+    }, [dispatch])
 
     useEffect(() => {
         setIsShowMenu(windowWidth >= 720);
@@ -106,7 +107,8 @@ const LayoutWidget = () => {
                 <div className={styles.menu}>
                     <MenuOutlined 
                     style={{fontSize: '20px', padding: '5.5px'}}
-                    onClick={() => setIsShowMenu(!isShowMenu)}/>
+                    onClick={() => setIsShowMenu(!isShowMenu)}
+                    />
                 </div>
                     <Menu 
                     mode="horizontal"

@@ -2,15 +2,16 @@ import { useDispatch, useSelector } from "react-redux"
 import { selectBudgets, selectDate, selectPeriod, setBudgets, setTotalAmount } from "../budget-slice"
 import { Button, Dropdown, Flex, Progress } from "antd";
 import { selectExpenses } from "../../Expenses/expenses-slice";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { AlignCenterOutlined, DeleteOutlined, FileSearchOutlined } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import styles from './styles.module.css'
 import { deleteBudgets } from "../api/deleteBudget";
 import type { MenuInfo } from "rc-menu/lib/interface";
 import type { InfoBudget } from "../../../shared/types";
-import { dateValidate } from "../../../shared/validation";
 import BudgetDescription from "./BudgetDescription";
+import dayjs from 'dayjs';
+import useBudget from "../../../shared/useBudget";
 
 const BudgetList = () => {
 
@@ -23,30 +24,7 @@ const BudgetList = () => {
     const [filteredBudgets, setFilteredBudgets] = useState<InfoBudget[]>(budgets);
     const [openBudgetId, setOpenBudgetId] = useState<string | null>(null);
 
-    const expensesByCategory = useMemo(() => {
-        const result: { [key: string]: { [key: string]: number } } = {}
-
-        budgets.forEach(budget => {
-            const budgetStartDate = dateValidate(budget.dateStart); 
-            const budgetEndDate = dateValidate(budget.dateEnd);
-            if(budget.id) {
-                if (!result[budget.id]) { result[budget.id] = { [budget.category]: 0 };
-                }
-                result[budget.id][budget.category] = 0;
-    
-                expenses.forEach(expense => {
-                    const expenseDate = dateValidate(expense.date);
-                    
-                     if(expense.category === budget.category
-                        && expenseDate >= budgetStartDate 
-                        && expenseDate <= budgetEndDate) {
-                    result[budget.id!][budget.category] += expense.amount;
-                     }
-                })
-            }
-        })
-        return result
-    }, [budgets, expenses])
+    const expensesByCategory = useBudget(budgets, expenses);
 
     const handleMenuClick: (info: MenuInfo, budget: InfoBudget) => void = (info, budget) => {
         if(info.key === '1') {
@@ -113,7 +91,7 @@ const BudgetList = () => {
         else if (period === 'Свой период') {
             filterItems = budgets;
             if(dateDay) {
-                filterItems = filterItems.filter(budget => budget.dateStart <= dateDay && budget.dateEnd >= dateDay)
+                filterItems = filterItems.filter(budget => dayjs(budget.dateStart, 'DD.MM.YYYY') <= dayjs(dateDay, 'DD.MM.YYYY') && dayjs(budget.dateEnd, 'DD.MM.YYYY') >= dayjs(dateDay, 'DD.MM.YYYY'))  
             }
         } 
         filterItems.forEach(item => sum += item.amount);

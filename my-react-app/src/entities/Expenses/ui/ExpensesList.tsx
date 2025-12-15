@@ -91,26 +91,42 @@ const columns: TableColumnsType<InfoExpense> = [
         key: 'date', 
         sorter: (a, b) => dayjs(a.date, dateFormat).valueOf() - dayjs(b.date, dateFormat).valueOf(),
         sortDirections: ['ascend', 'descend'],
-        filterDropdown: ({ setSelectedKeys, confirm, selectedKeys }) => (
+        filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
             <div style={{ padding: 8 }}>
-                <DatePicker
-                    onChange={(date) => {
-                        if (date) {
-                            setSelectedKeys([date.format(dateFormat)]);
-                        } else {
-                            setSelectedKeys([]);
-                        }
+            <DatePicker
+                onChange={(date) => {
+                    setSelectedKeys(date ? [date.format(dateFormat)] : []);
+                }}
+                onOk={() => confirm()}
+                format={dateFormat}
+                value={selectedKeys[0] ? dayjs(String(selectedKeys[0]), dateFormat) : null}
+                style={{ marginBottom: 8, display: 'block' }}
+            />
+            <Space>
+                <Button
+                    type="primary"
+                    onClick={() => confirm()}
+                    size="small"
+                    style={{ width: 90 }}
+                >
+                    Поиск
+                </Button>
+                <Button
+                    onClick={() => {
+                        clearFilters?.();
+                        confirm();
                     }}
-                    onOk={() => confirm()}
-                    format={dateFormat}
-                    value={selectedKeys[0] ? dayjs(String(selectedKeys[0]), dateFormat) : null
-                    }
-                    needConfirm
-                />
-            </div>
+                    size="small"
+                    style={{ width: 90 }}
+                >
+                    Сбросить
+                </Button>
+            </Space>
+        </div>
             ),
         onFilter: (value, record) => {
-      return record.date === value; 
+            console.log('Filter value:', value, 'Record date:', record.date);
+            return record.date === value;
         },
         filterSearch: true,
         width: '25%',
@@ -136,14 +152,14 @@ const columns: TableColumnsType<InfoExpense> = [
         }
 
         function onDelete (record: InfoExpense) {
-                if(record.id && record.user_id) {
-                    deleteExpenses(record.id, record.user_id)
-                    .then(() => {
-                        const updateExpenses = expenses.filter(expense => expense.id !== record.id);
-                        dispatch(setExpenses(updateExpenses));
-                    })
-                }
+            if(record.id && record.user_id) {
+                deleteExpenses(record.id, record.user_id)
+                .then(() => {
+                    const updateExpenses = expenses.filter(expense => expense.id !== record.id);
+                    dispatch(setExpenses(updateExpenses));
+                })
             }
+        }
         return (
             <Space>
             <Button type="default" size="small" onClick={() => onUpdate(record)}>Редактировать</Button>
@@ -155,7 +171,7 @@ const columns: TableColumnsType<InfoExpense> = [
     };
 
     
-     const onRow = (record: InfoExpense) => {
+    const onRow = (record: InfoExpense) => {
         return {
         onClick: () => {
             {

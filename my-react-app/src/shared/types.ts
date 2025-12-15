@@ -165,3 +165,26 @@ export interface BudgetState {
     description?: string,
   }
 }
+
+export interface InfoExpInc {
+  type: string,
+  Стоимость: number,
+  name: string,
+}
+
+export interface InfoProfit {
+  type: string,
+  Прибыль: number,
+  Убыток: number,
+}
+
+export interface InfoDash {
+  type: string,
+  label?: string,
+  value: number,
+}
+
+export interface AnaliticState {
+  finAudit: InfoProfit[],
+  dash: InfoDash[],
+}

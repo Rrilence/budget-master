@@ -6,17 +6,21 @@ import { headerMenuReducer } from "../entities/headerMenu-slice";
 import { expensesReducer } from "../entities/Expenses/expenses-slice";
 import { incomesReducer } from "../entities/Incomes/incomes-slice";
 import { budgetsReducer } from "../entities/Budget/budget-slice";
+import { windowReducer } from "../entities/windoWidth-slice";
+import { analiticReducer } from "../entities/Analitic/analitic-slice";
 
 
 export const store = configureStore({
     reducer: {
         theme: themeReducer,
         auth: authReducer,
+        window: windowReducer,
         sidebar: sidebarReducer,
         headerMenu: headerMenuReducer,
         expenses: expensesReducer,
         incomes: incomesReducer,
         budgets: budgetsReducer,
+        analitic: analiticReducer,
     },
     devTools: true
 })

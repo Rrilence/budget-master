@@ -1,4 +1,5 @@
 import { Button, DatePicker, Space, Table, type TableColumnsType } from "antd";
+import type { DatePickerProps } from 'antd';
 import dayjs from "dayjs";
 import type { InfoIncome } from "../../../shared/types";
 import { useDispatch, useSelector } from "react-redux";
@@ -42,26 +43,42 @@ const IncomesList = () => {
         key: 'date', 
         sorter: (a, b) => dayjs(a.date, dateFormat).valueOf() - dayjs(b.date, dateFormat).valueOf(),
         sortDirections: ['ascend', 'descend'],
-        filterDropdown: ({ setSelectedKeys, confirm, selectedKeys }) => (
+        filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
             <div style={{ padding: 8 }}>
-                <DatePicker
-                    onChange={(date) => {
-                        if (date) {
-                            setSelectedKeys([date.format(dateFormat)]);
-                        } else {
-                            setSelectedKeys([]);
-                        }
+            <DatePicker
+                onChange={(date) => {
+                    setSelectedKeys(date ? [date.format(dateFormat)] : []);
+                }}
+                onOk={() => confirm()}
+                format={dateFormat}
+                value={selectedKeys[0] ? dayjs(String(selectedKeys[0]), dateFormat) : null}
+                style={{ marginBottom: 8, display: 'block' }}
+            />
+            <Space>
+                <Button
+                    type="primary"
+                    onClick={() => confirm()}
+                    size="small"
+                    style={{ width: 90 }}
+                >
+                    Поиск
+                </Button>
+                <Button
+                    onClick={() => {
+                        clearFilters?.();
+                        confirm();
                     }}
-                    onOk={() => confirm()}
-                    format={dateFormat}
-                    value={selectedKeys[0] ? dayjs(String(selectedKeys[0]), dateFormat) : null
-                    }
-                    needConfirm
-                />
-            </div>
+                    size="small"
+                    style={{ width: 90 }}
+                >
+                    Сбросить
+                </Button>
+            </Space>
+        </div>
             ),
-        onFilter: (value, record) => {
-      return record.date === value; 
+       onFilter: (value, record) => {
+            console.log('Filter value:', value, 'Record date:', record.date);
+            return record.date === value;
         },
         filterSearch: true,
         width: '25%',

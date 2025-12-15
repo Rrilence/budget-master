@@ -1,8 +1,19 @@
-import { BidirectionalBar, Column } from "@ant-design/plots";
 import { useSelector } from "react-redux";
 import { selectExpenses } from "../../Expenses/expenses-slice";
 import { selectIncomes } from "../../Incomes/incomes-slice";
+import { useEffect, useMemo, useState } from "react";
+import dayjs from 'dayjs';
+import isBetween from 'dayjs/plugin/isBetween';
+import { selectTheme } from "../../Theme/theme-slice";
+import { BidirectionalBar } from "@ant-design/plots";
 
+dayjs.extend(isBetween);
+
+interface InfoChart {
+    type: string,
+    Расходы: number,
+    Доходы: number,
+}
 
 interface ExpIncProps {
   period: string
@@ -10,101 +21,139 @@ interface ExpIncProps {
 
 const ChartExpInc = ({period}: ExpIncProps) => {
 
+  const initialChart = useMemo(() => {
+    if(period === 'week') {
+      return [
+        {type: 'Пн', Расходы: 0, Доходы: 0},
+        {type: 'Вт', Расходы: 0, Доходы: 0},
+        {type: 'Ср', Расходы: 0, Доходы: 0},
+        {type: 'Чт', Расходы: 0, Доходы: 0},
+        {type: 'Пт', Расходы: 0, Доходы: 0},
+        {type: 'Сб', Расходы: 0, Доходы: 0},
+        {type: 'Вс', Расходы: 0, Доходы: 0},
+      ]
+    } else if(period === 'month') {
+      return [
+        {type: '1-7', Расходы: 0, Доходы: 0},
+        {type: '8-14', Расходы: 0, Доходы: 0},
+        {type: '15-21', Расходы: 0, Доходы: 0},
+        {type: '22-28', Расходы: 0, Доходы: 0},
+        {type: '28-31', Расходы: 0, Доходы: 0},
+      ]
+    } else if(period === 'year') {
+      return [
+        {type: '01', Расходы: 0, Доходы: 0},
+        {type: '02', Расходы: 0, Доходы: 0},
+        {type: '03', Расходы: 0, Доходы: 0},
+        {type: '04', Расходы: 0, Доходы: 0},
+        {type: '05', Расходы: 0, Доходы: 0},
+        {type: '06', Расходы: 0, Доходы: 0},
+        {type: '07', Расходы: 0, Доходы: 0},
+        {type: '08', Расходы: 0, Доходы: 0},
+        {type: '09', Расходы: 0, Доходы: 0},
+        {type: '10', Расходы: 0, Доходы: 0},
+        {type: '11', Расходы: 0, Доходы: 0},
+        {type: '12', Расходы: 0, Доходы: 0},
+      ]
+    } else {
+      return []
+    }
+  }, [period])
   const expenses = useSelector(selectExpenses);
   const incomes = useSelector(selectIncomes);
+  const theme = useSelector(selectTheme);
+  const [data, setData] = useState<InfoChart[]>(initialChart);
 
+  const processedData = useMemo(() => {
+    const newChart = initialChart.map(item => ({...item}));
+    const nowaday = dayjs();
+    
+    const chartMap = new Map(newChart.map(item => [item.type, item]));
+    
+    const addToPeriod = (amount: number, date: string, type: 'Расходы' | 'Доходы') => {
+        const itemDate = dayjs(date, 'DD.MM.YYYY');
+        
+        if (period === 'week') {
+            const monday = nowaday.startOf('week');
+            const sunday = nowaday.endOf('week');
+            
+            if (!itemDate.isBetween(monday, sunday, null, '[]')) return;
+            
+            const dayOfWeek = itemDate.format('dd');
+            const capitalizedDay = dayOfWeek[0].toUpperCase() + dayOfWeek.slice(1);
+            const chartItem = chartMap.get(capitalizedDay);
+            
+            if (chartItem) {
+                chartItem[type] += amount;
+            }
+        } 
+        else if (period === 'month') {
+            const currentMonth = nowaday.format('MM.YYYY');
+            
+            if (itemDate.format('MM.YYYY') !== currentMonth) return;
+            
+            const dayOfMonth = itemDate.date();
+            let periodType = '29-31';
+            
+            if (dayOfMonth <= 7) periodType = '1-7';
+            else if (dayOfMonth <= 14) periodType = '8-14';
+            else if (dayOfMonth <= 21) periodType = '15-21';
+            else if (dayOfMonth <= 28) periodType = '22-28';
+            
+            const chartItem = chartMap.get(periodType);
+            if (chartItem) {
+                chartItem[type] += amount;
+            }
+        } 
+        else if (period === 'year') {
+            const currentYear = nowaday.format('YYYY');
+            
+            if (itemDate.format('YYYY') !== currentYear) return;
+            
+            const monthOfYear = itemDate.format('MM');
+            const chartItem = chartMap.get(monthOfYear);
+            
+            if (chartItem) {
+                chartItem[type] += amount;
+            }
+        }
+    };
+    
+    expenses.forEach(expense => addToPeriod(expense.amount, expense.date, 'Расходы'));
+    incomes.forEach(income => addToPeriod(income.amount, income.date, 'Доходы'));
+    
+    return newChart;
+}, [expenses, incomes, initialChart, period]);
+
+useEffect(() => {
+    setData(processedData);
+}, [processedData]);
+
+  const config = {
+    data,
+    xField: 'type',
+    layout: 'vertical',
+    shapeField: 'column25D',
+    style: {
+      fill: (d) => {
+        if (d.groupKey === 'Доходы') return '#64DAAB';
+        return '#6395FA';
+      },
+    },
+    yField: ['Доходы', 'Расходы'],
+
+    axis: {
+      y: {
+        labelFill: theme === 'light' ? '#000' : '#ffffffe9',
+      },
+    },  
+  }
   
 
-  return (
-
-  )
+  return <BidirectionalBar {...config}/>
 } 
 
 export default ChartExpInc
 
-const data = [
-  { type: '1-3秒', value: 0.16 },
-  { type: '4-10秒', value: 0.125 },
-  { type: '11-30秒', value: 0.24 },
-  { type: '31-60秒', value: 0.19 },
-  { type: '1-3分', value: 0.22 },
-  { type: '3-10分', value: 0.05 },
-  { type: '10-30分', value: 0.01 },
-  { type: '30+分', value: 0.015 },
-];
 
-const DemoColumn = () => {
-  const config = {
-    data,
-    xField: 'type',
-    yField: 'value',
-    shapeField: 'column25D',
-    style: {
-      fill: 'rgba(126, 212, 236, 0.8)',
-    },
-  };
-  return <Column {...config} />;
-};
 
-const DemoBidirectionalBar = () => {
-  const data = [
-    {
-      country: '乌拉圭',
-      '2016年耕地总面积': 13.4,
-      '2016年转基因种植面积': 12.3,
-    },
-    {
-      country: '巴拉圭',
-      '2016年耕地总面积': 14.4,
-      '2016年转基因种植面积': 6.3,
-    },
-    {
-      country: '南非',
-      '2016年耕地总面积': 18.4,
-      '2016年转基因种植面积': 8.3,
-    },
-    {
-      country: '巴基斯坦',
-      '2016年耕地总面积': 34.4,
-      '2016年转基因种植面积': 13.8,
-    },
-    {
-      country: '阿根廷',
-      '2016年耕地总面积': 44.4,
-      '2016年转基因种植面积': 19.5,
-    },
-    {
-      country: '巴西',
-      '2016年耕地总面积': 24.4,
-      '2016年转基因种植面积': 18.8,
-    },
-    {
-      country: '加拿大',
-      '2016年耕地总面积': 54.4,
-      '2016年转基因种植面积': 24.7,
-    },
-    {
-      country: '中国',
-      '2016年耕地总面积': 104.4,
-      '2016年转基因种植面积': 5.3,
-    },
-    {
-      country: '美国',
-      '2016年耕地总面积': 165.2,
-      '2016年转基因种植面积': 72.9,
-    },
-  ];
-  const config = {
-    data,
-    xField: 'country',
-    layout: 'vertical',
-    style: {
-      fill: (d) => {
-        if (d.groupKey === '2016年转基因种植面积') return '#64DAAB';
-        return '#6395FA';
-      },
-    },
-    yField: ['2016年耕地总面积', '2016年转基因种植面积'],
-  };
-  return <BidirectionalBar {...config} />;
-};
