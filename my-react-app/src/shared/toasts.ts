@@ -112,6 +112,25 @@ const notifyCreateErrorExpense = () => {
         theme: "light",
     })
 } 
+const notifyCreateGoal = () => {
+    toast.success('Цель добавлена', {
+        toastId: '003',
+        position: "top-right",
+        autoClose: 1500,
+        closeOnClick: true,
+        theme: "light",
+    })
+} 
+
+const notifyCreateErrorGoal = () => {
+    toast.error('Ошибка, цель не добавлена', {
+        toastId: '003',
+        position: "top-right",
+        autoClose: 1500,
+        closeOnClick: true,
+        theme: "light",
+    })
+} 
 
 const notifyCreateIncome = () => {
     toast.success('Статья дохода добавлена', {
@@ -163,6 +182,16 @@ const notifyUpdateBudget = () => {
     })
 } 
 
+const notifyUpdateGoal = () => {
+    toast.success('Цель редактирована', {
+        toastId: '003',
+        position: "top-right",
+        autoClose: 1500,
+        closeOnClick: true,
+        theme: "light",
+    })
+} 
+
 const notifyCreateBudget = () => {
     toast.success('Бюджет успешно создан', {
         toastId: '003',
@@ -203,6 +232,26 @@ const notifyTransaction = () => {
     })
 } 
 
+const notifySaving = () => {
+    toast.success('Сумма накоплений изменена', {
+        toastId: '003',
+        position: "top-right",
+        autoClose: 1500,
+        closeOnClick: true,
+        theme: "light",
+    })
+} 
+
+const notifyErrorSaving = () => {
+    toast.error('Сумма накоплений не может быть изменена', {
+        toastId: '003',
+        position: "top-right",
+        autoClose: 1500,
+        closeOnClick: true,
+        theme: "light",
+    })
+} 
+
 const notifyErrorBudget = () => {
     toast.error('Бюджет с такой категорией и периодом уже существует', {
         toastId: '003',
@@ -235,5 +284,9 @@ export {
     notifyCreateErrorBudget, 
     notifyUpdateBudget,
     notifyErrorBudget,
-
+    notifyCreateGoal, 
+    notifyCreateErrorGoal,
+    notifyErrorSaving,
+    notifySaving,
+    notifyUpdateGoal,
 }

@@ -26,10 +26,6 @@ const Budget = () => {
     const theme = useSelector(selectTheme);
     const user = useSelector(selectUser);
 
-    const showModal = () => {
-        dispatch(setIsOpenModal(true))
-    };
-
     useEffect(() => {
         const initialState = async () => {
             try {if(!user) {throw Error}
@@ -63,7 +59,7 @@ const Budget = () => {
                 <Button
                 type="primary"
                 icon={<PlusCircleOutlined />} 
-                onClick={showModal}
+                onClick={() => dispatch(setIsOpenModal(true))}
                 > Добавить бюджет
                 </Button>
            </Flex>

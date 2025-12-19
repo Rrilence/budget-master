@@ -12,6 +12,7 @@ import type { InfoBudget } from "../../../shared/types";
 import BudgetDescription from "./BudgetDescription";
 import dayjs from 'dayjs';
 import useBudget from "../../../shared/useBudget";
+import { formatAmount } from "../../../shared/formatting";
 
 const BudgetList = () => {
 
@@ -115,7 +116,7 @@ const BudgetList = () => {
                     <Flex justify="space-between" style={{width: '100%'}}>
                         <div>
                             <p style={{fontWeight: 'bold'}}>{budget.category}</p>
-                            <p>{budget.amount} руб.</p>
+                            <p>{formatAmount(budget.amount)}</p>
                         </div>
                         <Dropdown menu={menuProps(budget)} placement="bottomRight" className={styles.button_menu} >
                             <Button type="text" icon={<AlignCenterOutlined />} style={{textShadow: '0px 0px 3px rgba(255, 255, 255, 1)'}} />
@@ -154,8 +155,8 @@ const BudgetList = () => {
                         style={{ width: '95%' }}
                     />
                     {budget.amount > spentAmount || !spentAmount
-                    ? <span style={{marginBottom: 15}}>Потрачено: {spentAmount || 0} руб.</span>
-                    : <span style={{marginBottom: 15, color: 'red'}}>Перерасход: {budget.amount - spentAmount || 0} руб.</span>
+                    ? <span style={{marginBottom: 15}}>Потрачено: {formatAmount(spentAmount) || 0}</span>
+                    : <span style={{marginBottom: 15, color: 'red'}}>Перерасход: {formatAmount(budget.amount - spentAmount) || 0}</span>
                     }
                 </Flex>
             ) 

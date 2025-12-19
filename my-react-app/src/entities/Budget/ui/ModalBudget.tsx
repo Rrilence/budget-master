@@ -29,56 +29,56 @@ const ModalBudget = () => {
     const user = useSelector(selectUser);
 
     const [state, submitAction, isPending] = useActionState(async (prevState: InfoBudget | undefined, values: InfoBudget) => {
-            if (!user) {
-                throw new Error('Пользователь не авторизован');
-            } 
-            if (!prevState) {
-                console.warn("prevState is undefined in useActionState, using defaultState");
-                return defaultState;
-            }
-            if(isUpdateBudget) {
-                if(initialValues && initialValues.id && initialValues.user_id) {
-                    const result = await updateBudgets(initialValues.id, initialValues.user_id, values)
-                    if(result && result.error) { 
-                            return { 
-                                ...prevState,
-                                error: result.error,
-                            }}
-                        if (result) {
-                            const newBudgets = budgets.map(budget => {
-                                if(budget.id === result.id) {
-                                    return {
-                                ...budget, ...result}
-                                } else {
-                                    return budget
-                                }}
-                                );
-                            dispatch(setBudgets(newBudgets));
+        if (!user) {
+            throw new Error('Пользователь не авторизован');
+        } 
+        if (!prevState) {
+            console.warn("prevState is undefined in useActionState, using defaultState");
+            return defaultState;
+        }
+        if(isUpdateBudget) {
+            if(initialValues && initialValues.id && initialValues.user_id) {
+                const result = await updateBudgets(initialValues.id, initialValues.user_id, values)
+                if(result && result.error) { 
+                    return { 
+                        ...prevState,
+                        error: result.error,
+                    }}
+                if (result) {
+                    const newBudgets = budgets.map(budget => {
+                        if(budget.id === result.id) {
+                            return {
+                        ...budget, ...result}
                         } else {
-                            return { 
-                                ...prevState,
-                                error: 'Не удалось редактировать запись',
-                            }
-                        }
-                }
-            } 
-            else {
-                const result = await createBudget(user)(prevState, values)  
-                    if(result && result.error) { 
-                        return { 
-                            ...prevState,
-                            error: result.error,
+                            return budget
                         }}
-                    if (result) {
-                        dispatch(setBudgets([...budgets, result]));
-                    } else {
-                        return { 
-                            ...prevState,
-                            error: 'Не удалось создать запись',
-                        }
+                        );
+                    dispatch(setBudgets(newBudgets));
+                } else {
+                    return { 
+                        ...prevState,
+                        error: 'Не удалось редактировать запись',
                     }
+                }
             }
-                    }, defaultState);
+        } 
+        else {
+            const result = await createBudget(user)(prevState, values)  
+                if(result && result.error) { 
+                    return { 
+                        ...prevState,
+                        error: result.error,
+                    }}
+                if (result) {
+                    dispatch(setBudgets([...budgets, result]));
+                } else {
+                    return { 
+                        ...prevState,
+                        error: 'Не удалось создать запись',
+                    }
+                }
+        }
+    }, defaultState);
 
     const onCancel = () => {
         dispatch(setIsOpenModal(false));
@@ -197,7 +197,10 @@ const ModalBudget = () => {
                 name="amount" 
                 layout="vertical"
                 label="Лимит, руб: " 
-                required
+                rules={[
+                    { required: true, message: 'Введите сумму' },
+                    { type: 'number', min: 0.01, message: 'Сумма должна быть больше 0' },
+                ]}
                 style={{ marginBottom: '10px' }}>
                     <InputNumber
                     min={0}

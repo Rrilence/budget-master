@@ -19,6 +19,10 @@ import { BellOutlined } from "@ant-design/icons";
 import { selectBudgets, setBudgets } from "../../../entities/Budget/budget-slice";
 import { getBudgets } from "../../../entities/Budget/api/getBudgets";
 import useBudget from "../../../shared/useBudget";
+import DashGoals from "../../../entities/Dashboard/DashGoals";
+import { getGoals } from "../../../entities/Goals/api/getGoals";
+import { selectGoals, setGoals } from "../../../entities/Goals/goals-slice";
+import dayjs from 'dayjs';
 
 const {Text} = Typography
 
@@ -33,6 +37,7 @@ const DashBoard = () => {
     const expenses = useSelector(selectExpenses);
     const incomes = useSelector(selectIncomes);
     const budgets = useSelector(selectBudgets);
+    const goals = useSelector(selectGoals);
     const user = useSelector(selectUser);
     const windowWidth = useSelector(selectWindowWidth);
     const theme = useSelector(selectTheme);
@@ -42,6 +47,8 @@ const DashBoard = () => {
     const [expense, setExpense] = useState(0);
     const [income, setIncome] = useState(0);
     const [exceedBudget, setExceedBudget] = useState<Exceed[]>([]);
+    const [dedlineGoals, setDedlineGoals] = useState<Exceed[]>([]);
+    const [overdueGoals, setOverdueGoals] = useState<Exceed[]>([]);
     const [isDesktop, setIsDesktop] = useState(false); 
 
     const openNotificationWithIcon = (type: NotificationType) => {
@@ -51,19 +58,33 @@ const DashBoard = () => {
               description: `Превышен запланированный бюджет по категории ${item}`,
             });
         })
+        dedlineGoals.forEach(item => {
+            api[type]({
+              message: 'Внимание!',
+              description: `Подходит срок достижения цели: ${item}`,
+            });
+        })
+        overdueGoals.forEach(item => {
+            api[type]({
+              message: 'Внимание!',
+              description: `Просрочен срок достижения цели: ${item}`,
+            });
+        })
     };  
 
     useEffect(() => {
         const initialState = async () => {
             try {if(!user) {throw Error}
-            const [expenses, incomes, budgets] = await Promise.all([
+            const [expenses, incomes, budgets, goals] = await Promise.all([
                     getExpenses(user),
                     getIncomes(user),
-                    getBudgets(user)
+                    getBudgets(user),
+                    getGoals(user),
                 ]);
             dispatch(setExpenses(expenses));
             dispatch(setIncomes( incomes));
             dispatch(setBudgets(budgets));
+            dispatch(setGoals(goals));
             } catch (error) {
             console.error('Ошибка при загрузке данных', error);
             notifyError();
@@ -83,20 +104,41 @@ const DashBoard = () => {
         }
         return acc;
     }, []);
+
+    const dedline = goals.reduce<string[]>((acc, goal) => {
+        if (dayjs(goal.date, 'DD.MM.YYYY').diff(dayjs(), 'day') < 8 
+        && dayjs(goal.date, 'DD.MM.YYYY').diff(dayjs(), 'day') > 0) {
+            acc.push(goal.name);
+        }
+        return acc;
+    }, []);
+
+    const overdue = goals.reduce<string[]>((acc, goal) => {
+        if (dayjs(goal.date, 'DD.MM.YYYY').diff(dayjs(), 'day') === 0 ||
+        dayjs(goal.date, 'DD.MM.YYYY').diff(dayjs(), 'day') < 0
+        ) { 
+            acc.push(goal.name);
+        }
+        return acc;
+    }, []);
     
     return {
         expense: sumExpenses,
         income: sumIncomes,
         balance: sumIncomes - sumExpenses,
         exceedBudget: exceeded,
+        dedline,
+        overdue,
     };
-}, [expenses, incomes, budgets, expensesByCategory]);
+}, [expenses, incomes, budgets, expensesByCategory, goals]);
 
 useEffect(() => {
     setExpense(financialData.expense);
     setIncome(financialData.income);
     setBalance(financialData.balance);
     setExceedBudget(financialData.exceedBudget);
+    setOverdueGoals(financialData.overdue);
+    setDedlineGoals(financialData.dedline);
 }, [financialData]);
 
 
@@ -120,7 +162,7 @@ useEffect(() => {
         vertical 
         justify="center"
         className={clsx(`${theme === 'light' ? 'light' : 'dark'}`, styles.balance)}>
-            <Badge count={exceedBudget.length} size="small">
+            <Badge count={exceedBudget.length + overdueGoals.length + dedlineGoals.length} size="small">
                 {contextHolder}
                 <BellOutlined style={{ fontSize: 25}} onClick={() => openNotificationWithIcon('error')}/>
             </Badge>
@@ -147,6 +189,7 @@ useEffect(() => {
                     </Col>
                     <Col span={10} offset={2}>
                         <DashTransactions/> 
+                        <DashGoals/>
                     </Col>
                 </Row> 
                 ) : (
@@ -155,6 +198,7 @@ useEffect(() => {
                         <DashChart sumExpenses={expense}/>
                         <ExpenseIncome/>   
                         <DashTransactions/> 
+                        <DashGoals/>
                     </Col>
                 </Row>
                 )

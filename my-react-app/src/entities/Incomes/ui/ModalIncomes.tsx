@@ -123,7 +123,13 @@ const ModalIncomes = () => {
                 layout="vertical"
                 name="name" 
                 label="Название: " 
-                required
+                rules={[
+                    { required: true, message: 'Пожалуйста, введите название' },
+                    { 
+                    pattern: regExpression, 
+                    message: 'Введите название на русском языке' 
+                    },
+                ]}
                 style={{ marginBottom: '10px' }}>
                     <Input 
                     value={name}
@@ -134,7 +140,10 @@ const ModalIncomes = () => {
                     layout="vertical"
                     name="amount" 
                     label="Сумма: " 
-                    required
+                    rules={[
+                        { required: true, message: 'Введите сумму' },
+                        { type: 'number', min: 0.01, message: 'Сумма должна быть больше 0' },
+                    ]}
                     style={{ marginBottom: '10px' }}>
                         <InputNumber
                         min={0}

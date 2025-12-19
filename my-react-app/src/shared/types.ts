@@ -118,6 +118,17 @@ export interface InfoBudget {
   error?: string | null,
 }
 
+export interface InfoGoal {
+  id?: string | undefined,
+  user_id?: string | null | undefined,
+  name: string,
+  totalAmount: number,
+  amount: number,
+  date: string,
+  icon?: string,
+  error?: string | null,
+}
+
 type TransactionState = 'Расходы' | 'Доходы';
 
 export interface ExpensesState {
@@ -163,6 +174,21 @@ export interface BudgetState {
     dateStart?: string,
     dateArr: string[],
     description?: string,
+  }
+}
+
+export interface GoalState {
+  isModalOpen: boolean,
+  isUpdateGoal: boolean,
+  updateGoalId: string,
+  goals: InfoGoal[],
+  initialValues: {
+    id: string,
+    user_id: string,
+    name: string,
+    totalAmount: number,
+    amount: number,
+    date: string,
   }
 }
 

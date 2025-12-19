@@ -17,8 +17,6 @@ const Audit = () => {
         .filter(item => item.Убыток < 0)
         .map(item => dayjs(item.type, 'MM').format('MMMM'));
     const totalProfit = finAudit.reduce((acc, item) => {
-        console.log(acc);
-        
         return acc + (item.Прибыль + item.Убыток);
     }, 0);
 
@@ -38,7 +36,7 @@ const Audit = () => {
             <Flex vertical gap={10}>
                 <Text><DollarOutlined style={{color: '#d2b512ff'}}/> Текущий убыток: <b>{totalProfit} руб.</b></Text>
                 <Text><EditOutlined style={{color: '#850e3aff'}}/> Общая тенденция: <b>отрицательная</b></Text>
-                <Text><b>Рекомендация:</b> проанализировать факторы неудачи в указанные периоды. Проанализировать и по возможности уменьшить расходы по самым убыточным категориям</Text>
+                <Text><b>Рекомендация:</b> проанализировать факторы неудачи в указанные периоды и по возможности уменьшить расходы по самым убыточным категориям</Text>
             </Flex>
             }
         </Flex>

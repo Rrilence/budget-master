@@ -8,6 +8,7 @@ import { incomesReducer } from "../entities/Incomes/incomes-slice";
 import { budgetsReducer } from "../entities/Budget/budget-slice";
 import { windowReducer } from "../entities/windoWidth-slice";
 import { analiticReducer } from "../entities/Analitic/analitic-slice";
+import { goalsReducer } from "../entities/Goals/goals-slice";
 
 
 export const store = configureStore({
@@ -21,6 +22,7 @@ export const store = configureStore({
         incomes: incomesReducer,
         budgets: budgetsReducer,
         analitic: analiticReducer,
+        goals: goalsReducer,
     },
     devTools: true
 })
