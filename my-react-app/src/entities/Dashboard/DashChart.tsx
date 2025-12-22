@@ -2,7 +2,7 @@ import { Pie } from "@ant-design/plots";
 import { useDispatch, useSelector } from "react-redux";
 import { selectExpenses } from "../Expenses/expenses-slice";
 import { useEffect, useMemo, useState } from "react";
-import { formatAmount } from "../../shared/formatting";
+import { formatAmount, getCategoryColor } from "../../shared/formatting";
 import { selectTheme } from "../Theme/theme-slice";
 import { selectWindowWidth, setWindowWidth } from "../windoWidth-slice";
 import type { InfoDash } from "../../shared/types";
@@ -78,37 +78,7 @@ const DashChart = ({sumExpenses}: DashProps) => {
       crossPadding: 40,
       rowPadding: 5,
       itemLabelFill: theme === 'light' ? '#000' : '#fff',
-      itemMarkerFill: ({ label }: InfoDash) => {
-      if (label === 'Дом') {
-        return '#cc1616ff';
-      } else if (label === 'Продукты') {
-        return '#2656e9ff';
-      } else if (label === 'Здоровье') {
-        return '#14bc14ff';
-      } else if (label === 'Одежда') {
-        return '#7a068fff';
-      } else if (label === 'Транспорт') {
-        return '#e07314ff';
-      } else if (label === 'Спорт') {
-        return '#25eeb2ff';
-      } else if (label === 'Досуг') {
-        return '#e7f73aff';
-      } else if (label === 'Путешествия') {
-        return 'rgba(63, 175, 236, 1)';
-      } else if (label === 'Машина') {
-        return '#9025eeff';
-      } else if (label === 'Кафе') {
-        return '#6a390fff';
-      } else if (label === 'Связь') {
-        return '#96e319ff';
-      } else if (label === 'Домашние животные') {
-        return '#281c13ff';
-      } else if (label === 'Подарки') {
-        return '#c828aaff';
-      } else if (label === 'Другое') {
-        return '#5aececff';
-      }
-    }
+      itemMarkerFill: ({ label }: { label: string }) => getCategoryColor(label)
   }}
   : false;
 
@@ -118,8 +88,7 @@ const DashChart = ({sumExpenses}: DashProps) => {
     colorField: 'type',
     innerRadius: 0.6,
     label: false,
-    legend: legendConfig,
-    tooltip: false,
+    legend: legendConfig,  
     annotations: [
       {
         type: 'text',
@@ -137,37 +106,18 @@ const DashChart = ({sumExpenses}: DashProps) => {
     style: {
       inset: 1.5,
       radius: 3,
-      fill: ({ type }: InfoDash) => {
-        if (type === 'Дом') {
-          return '#cc1616ff';
-        } if (type === 'Продукты') {
-          return '#2656e9ff';
-        } if (type === 'Здоровье') {
-          return '#14bc14ff';
-        } if (type === 'Одежда') {
-          return '#7a068fff';
-        } if (type === 'Транспорт') {
-          return '#e07314ff';
-        } if (type === 'Спорт') {
-          return '#25eeb2ff';
-        } if (type === 'Досуг') {
-          return '#e7f73aff';
-        } if (type === 'Путешествия') {
-          return 'rgba(63, 175, 236, 1)';
-        } if (type === 'Машина') {
-          return '#9025eeff';
-        } if (type === 'Кафе') {
-          return '#6a390fff';
-        } if (type === 'Связь') {
-          return '#96e319ff';
-        } if (type === 'Домашние животные') {
-          return '#281c13ff';
-        } if (type === 'Подарки') {
-          return '#c828aaff';
-        } if (type === 'Другое') {
-          return '#5aececff';
-        }
-      },
+      fill: ({ type }: { type: string }) => getCategoryColor(type),
+    },
+    tooltip: {
+      items: [
+        (d) => {
+          return {
+            value: formatAmount(d.value),
+            name: d.type,
+           color: getCategoryColor(d.type),
+          };
+        },
+      ],
     },
   };
   return (

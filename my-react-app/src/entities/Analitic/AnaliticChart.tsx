@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { selectExpenses } from "../Expenses/expenses-slice";
 import { Column } from "@ant-design/plots";
 import { selectTheme } from "../Theme/theme-slice";
+import { formatAmount, getCategoryColor } from "../../shared/formatting";
 
 
 const AnaliticChart = () => {
@@ -53,45 +54,25 @@ const AnaliticChart = () => {
   colorField: 'type',
   shapeField: 'column25D',
   legend: false,
-  tooltip: false,
   axis: {
       x: {
         labelSpacing: 12
       },
     },
   style: {
-    fill: ({ type }: InfoDash) => {
-      if (type === 'Дом') {
-        return '#cc1616ff';
-      } if (type === 'Продукты') {
-        return '#2656e9ff';
-      } if (type === 'Здоровье') {
-        return '#14bc14ff';
-      } if (type === 'Одежда') {
-        return '#7a068fff';
-      } if (type === 'Транспорт') {
-        return '#e07314ff';
-      } if (type === 'Спорт') {
-        return '#25eeb2ff';
-      } if (type === 'Досуг') {
-        return '#e7f73aff';
-      } if (type === 'Путешествия') {
-        return 'rgba(63, 175, 236, 1)';
-      } if (type === 'Машина') {
-        return '#9025eeff';
-      } if (type === 'Кафе') {
-        return '#6a390fff';
-      } if (type === 'Связь') {
-        return '#96e319ff';
-      } if (type === 'Домашние животные') {
-        return '#281c13ff';
-      } if (type === 'Подарки') {
-        return '#c828aaff';
-      } if (type === 'Другое') {
-        return '#5aececff';
-      }
-    },
+    fill: ({ type }: { type: string }) => getCategoryColor(type),
   },
+  tooltip: {
+    title: false,
+    items: [
+      (d) => {
+        return {
+          value: formatAmount(d.value),
+          color: getCategoryColor(d.type),
+        };
+      },
+    ],
+    },
   };
   return <Column {...config} />;
 

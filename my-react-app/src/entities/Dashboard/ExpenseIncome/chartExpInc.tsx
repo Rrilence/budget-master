@@ -141,7 +141,24 @@ useEffect(() => {
       },
     },
     yField: ['Доходы', 'Расходы'],
-
+    tooltip: {
+      items: [
+        (d) => {
+          return {
+            name: 'Доходы',
+            value: d.Доходы,
+            color: '#64DAAB',
+          };
+        },
+        (d) => {
+          return {
+            name: 'Расходы',
+            value: d.Расходы,
+            color: '#6395FA',
+          };
+        },
+      ],
+    },
     axis: {
       y: {
         labelFill: theme === 'light' ? '#000' : '#ffffffe9',

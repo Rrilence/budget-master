@@ -69,6 +69,26 @@ const formatAmount = (number: number) => {
   }).format(number) + ' руб.';
 };
 
+const getCategoryColor = (category: string): string => {
+  const colorMap: Record<string, string> = {
+    'Дом': '#cc1616ff',
+    'Продукты': '#2656e9ff',
+    'Здоровье': '#14bc14ff',
+    'Одежда': '#7a068fff',
+    'Транспорт': '#e07314ff',
+    'Спорт': '#25eeb2ff',
+    'Досуг': '#e7f73aff',
+    'Путешествия': 'rgba(63, 175, 236, 1)',
+    'Машина': '#9025eeff',
+    'Кафе': '#6a390fff',
+    'Связь': '#96e319ff',
+    'Домашние животные': '#281c13ff',
+    'Подарки': '#c828aaff',
+    'Другое': '#5aececff'
+  };
+    return colorMap[category] || '#888888';
+  };
+
 export {
     formatDateWeather,
     formatDayWeather,
@@ -78,5 +98,5 @@ export {
     formatDate,
     formatWeek,
     formatAmount, 
-
+    getCategoryColor,
 }
