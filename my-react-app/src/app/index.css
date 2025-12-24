@@ -150,6 +150,18 @@ aside {
     color: #33c2cc !important;
 }
 
+.ant-checkbox-wrapper:after {
+  display: none !important;
+}
+
+.ant-checkbox-wrapper {
+    flex-direction: row-reverse !important;
+    justify-content: space-between !important;
+}
+
+.ant-checkbox+span {
+    padding-inline-start: 0px !important;
+}
 
 @media (min-width: 500px) {
     .form {

@@ -1,6 +1,6 @@
 import { useMemo } from "react";
-import type { InfoBudget, InfoExpense } from "./types";
-import { dateValidate } from "./validation";
+import type { InfoBudget, InfoExpense } from "../types";
+import { dateValidate } from "../validation";
 
 interface ExpensesByCategory {
     [budgetId: string]: { [category: string]: number };

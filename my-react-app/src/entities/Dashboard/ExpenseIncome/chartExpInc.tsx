@@ -4,7 +4,7 @@ import { selectIncomes } from "../../Incomes/incomes-slice";
 import { useEffect, useMemo, useState } from "react";
 import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
-import { selectTheme } from "../../Theme/theme-slice";
+import { selectTheme } from "../../setting-slice";
 import { BidirectionalBar } from "@ant-design/plots";
 
 dayjs.extend(isBetween);
@@ -143,14 +143,14 @@ useEffect(() => {
     yField: ['Доходы', 'Расходы'],
     tooltip: {
       items: [
-        (d) => {
+        (d: InfoChart) => {
           return {
             name: 'Доходы',
             value: d.Доходы,
             color: '#64DAAB',
           };
         },
-        (d) => {
+        (d: InfoChart) => {
           return {
             name: 'Расходы',
             value: d.Расходы,

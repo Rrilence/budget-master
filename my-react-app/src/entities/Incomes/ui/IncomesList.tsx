@@ -1,5 +1,4 @@
 import { Button, DatePicker, Space, Table, type TableColumnsType } from "antd";
-import type { DatePickerProps } from 'antd';
 import dayjs from "dayjs";
 import type { InfoIncome } from "../../../shared/types";
 import { useDispatch, useSelector } from "react-redux";

@@ -3,12 +3,11 @@ import { selectExpenses, setExpenses } from "../../../entities/Expenses/expenses
 import { selectIncomes, setIncomes } from "../../../entities/Incomes/incomes-slice";
 import { useEffect, useMemo, useState } from "react";
 import { Badge, Col, Flex, Progress, Row, Typography, notification } from "antd";
-import { formatAmount } from "../../../shared/formatting";
 import { selectUser } from "../../../entities/auth-slice";
 import { getExpenses } from "../../../entities/Expenses/api/getExpenses";
 import { notifyError } from "../../../shared/toasts";
 import { getIncomes } from "../../../entities/Incomes/api/getIncomes";
-import { selectTheme } from "../../../entities/Theme/theme-slice";
+import { selectData, selectTheme } from "../../../entities/setting-slice";
 import styles from './styles.module.css'
 import clsx from "clsx";
 import DashChart from "../../../entities/Dashboard/DashChart";
@@ -18,11 +17,12 @@ import DashTransactions from "../../../entities/Dashboard/DashTransactions";
 import { BellOutlined } from "@ant-design/icons";
 import { selectBudgets, setBudgets } from "../../../entities/Budget/budget-slice";
 import { getBudgets } from "../../../entities/Budget/api/getBudgets";
-import useBudget from "../../../shared/useBudget";
+import useBudget from "../../../shared/hooks/useBudget";
 import DashGoals from "../../../entities/Dashboard/DashGoals";
 import { getGoals } from "../../../entities/Goals/api/getGoals";
 import { selectGoals, setGoals } from "../../../entities/Goals/goals-slice";
 import dayjs from 'dayjs';
+import useCurrency from "../../../shared/hooks/useCurrency";
 
 const {Text} = Typography
 
@@ -41,6 +41,7 @@ const DashBoard = () => {
     const user = useSelector(selectUser);
     const windowWidth = useSelector(selectWindowWidth);
     const theme = useSelector(selectTheme);
+    const is = useSelector(selectData);
     const expensesByCategory = useBudget(budgets, expenses);
 
     const [balance, setBalance] = useState(0);
@@ -50,6 +51,8 @@ const DashBoard = () => {
     const [dedlineGoals, setDedlineGoals] = useState<Exceed[]>([]);
     const [overdueGoals, setOverdueGoals] = useState<Exceed[]>([]);
     const [isDesktop, setIsDesktop] = useState(false); 
+
+    const {formatAmount} = useCurrency();
 
     const openNotificationWithIcon = (type: NotificationType) => {
         exceedBudget.forEach(item => {
@@ -76,11 +79,11 @@ const DashBoard = () => {
         const initialState = async () => {
             try {if(!user) {throw Error}
             const [expenses, incomes, budgets, goals] = await Promise.all([
-                    getExpenses(user),
-                    getIncomes(user),
-                    getBudgets(user),
-                    getGoals(user),
-                ]);
+                getExpenses(user),
+                getIncomes(user),
+                getBudgets(user),
+                getGoals(user),
+            ]);
             dispatch(setExpenses(expenses));
             dispatch(setIncomes( incomes));
             dispatch(setBudgets(budgets));
@@ -162,10 +165,12 @@ useEffect(() => {
         vertical 
         justify="center"
         className={clsx(`${theme === 'light' ? 'light' : 'dark'}`, styles.balance)}>
+            {is.notifications &&
             <Badge count={exceedBudget.length + overdueGoals.length + dedlineGoals.length} size="small">
                 {contextHolder}
                 <BellOutlined style={{ fontSize: 25}} onClick={() => openNotificationWithIcon('error')}/>
             </Badge>
+            }
             <Text strong style={{fontSize: 17}}>Баланс: {formatAmount(balance)}</Text>
             <Progress 
             percentPosition={{align: 'end', type: 'outer' }}

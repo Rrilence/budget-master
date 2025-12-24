@@ -4,7 +4,7 @@ import { selectExpenses } from "../Expenses/expenses-slice";
 import { selectIncomes } from "../Incomes/incomes-slice";
 import { useEffect, useMemo, useState } from "react";
 import dayjs from 'dayjs';
-import { selectTheme } from "../Theme/theme-slice";
+import { selectTheme } from "../setting-slice";
 import type { InfoExpInc, InfoProfit } from "../../shared/types";
 import { setFinAudit } from "./analitic-slice";
 
@@ -111,7 +111,7 @@ const DualChart = () => {
   padding: [50, 50, 50, 50],
   legend: true,
   scale: { color: { range: ['#c4e218ff', '#6395FA', '#64DAAB'] } },
-  interaction: { tooltip: { sort: (d) => ['Прибыль', 'Доходы', 'Расходы'].indexOf(d.name) } },
+  interaction: { tooltip: { sort: (d: InfoExpInc) => ['Прибыль', 'Доходы', 'Расходы'].indexOf(d.name) } },
   children: [
     {
       data: profit,

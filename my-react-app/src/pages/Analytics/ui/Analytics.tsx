@@ -1,60 +1,27 @@
 import { useDispatch, useSelector } from "react-redux";
-import { selectExpenses, setExpenses } from "../../../entities/Expenses/expenses-slice";
-import { selectIncomes, setIncomes } from "../../../entities/Incomes/incomes-slice";
+import { setExpenses } from "../../../entities/Expenses/expenses-slice";
+import { setIncomes } from "../../../entities/Incomes/incomes-slice";
 import DualChart from "../../../entities/Analitic/DualChart";
 import { selectUser } from "../../../entities/auth-slice";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { getExpenses } from "../../../entities/Expenses/api/getExpenses";
 import { getIncomes } from "../../../entities/Incomes/api/getIncomes";
 import { notifyError } from "../../../shared/toasts";
 import { selectWindowWidth, setWindowWidth } from "../../../entities/windoWidth-slice";
-import { Col, Flex, Row, Typography } from "antd";
+import { Col, Row } from "antd";
 import Audit from "../../../entities/Analitic/Audit";
 import AnaliticChart from "../../../entities/Analitic/AnaliticChart";
-import styles from './styles.module.css'
-import { selectTheme } from "../../../entities/Theme/theme-slice";
-
-const {Text} = Typography;
-
+import { selectTheme } from "../../../entities/setting-slice";
+import { AnaliticCalc } from "../../../entities/Analitic/AnaliticCalc";
 
 const Analytics = () => {
 
   const dispatch = useDispatch();
-  const expenses = useSelector(selectExpenses);
-  const incomes = useSelector(selectIncomes)
   const windowWidth = useSelector(selectWindowWidth);
   const user = useSelector(selectUser);
   const theme = useSelector(selectTheme);
 
   const [isDesktop, setIsDesktop] = useState(false); 
-
-  const calcExpense = useMemo(() => {
-    const expAmount: number[] = [];
-    expenses.forEach(item => ( expAmount.push(item.amount)))
-    const min = Math.min(...expAmount);
-    const max = Math.max(...expAmount);
-    const sum = expAmount.reduce((acc, exp) => acc + exp, 0);
-    const average = Math.round(sum / expAmount.length);
-
-    return {
-      min, max, average
-    }
-
-  }, [expenses]);
-
-  const calcIncome = useMemo(() => {
-    const incAmount: number[] = [];
-    incomes.forEach(item => ( incAmount.push(item.amount)))
-    const min = Math.min(...incAmount);
-    const max = Math.max(...incAmount);
-    const sum = incAmount.reduce((acc, inc) => acc + inc, 0);
-    const average = Math.round(sum / incAmount.length);
-
-    return {
-      min, max, average
-    }
-
-  }, [incomes]);
 
   useEffect(() => {
     const initialState = async () => {
@@ -94,34 +61,7 @@ const Analytics = () => {
           <div style={{height: '500px'}}>
             <DualChart />   
           </div>
-            <Flex justify="space-between" className={styles.statistic}>
-              <Flex vertical align="center">
-                <Text strong style={{color: '#19a86fff'}}>Мин. доход</Text>
-                <Text>{calcIncome.min} руб.</Text>
-              </Flex>
-              <Flex vertical align="center">
-                <Text strong style={{color: '#19a86fff'}}>Средний доход</Text>
-                <Text>{calcIncome.average} руб.</Text>
-              </Flex>
-              <Flex vertical align="center">
-                <Text strong style={{color: '#19a86fff'}}>Макс. доход</Text>
-                <Text>{calcIncome.max} руб.</Text>
-              </Flex>
-            </Flex> 
-            <Flex justify="space-between" className={styles.statistic}>
-              <Flex vertical align="center">
-                <Text strong style={{color: '#6395FA'}}>Мин. расход</Text>
-                <Text>{calcExpense.min} руб.</Text>
-              </Flex>
-              <Flex vertical align="center">
-                <Text strong style={{color: '#6395FA'}}>Средний драсход</Text>
-                <Text>{calcExpense.average} руб.</Text>
-              </Flex>
-              <Flex vertical align="center">
-                <Text strong style={{color: '#6395FA'}}>Макс. расход</Text>
-                <Text>{calcExpense.max} руб.</Text>
-              </Flex>
-            </Flex> 
+          <AnaliticCalc/>
           </Col>
           <Col span={12} style={{padding: '70px 20px'}}>  
             <div style={{height: '531px'}}>
@@ -136,34 +76,7 @@ const Analytics = () => {
         <Row justify="center" className={`${theme === 'light' ? 'light' : 'dark'}`}>
           <Col span={24}>
             <DualChart/>
-            <Flex justify="space-between" gap={5} className={styles.statistic}>
-              <Flex vertical align="center">
-                <Text strong style={{color: '#19a86fb0', textAlign: 'center'}}>Мин. доход</Text>
-                <Text>{calcIncome.min} руб.</Text>
-              </Flex>
-              <Flex vertical align="center">
-                <Text strong style={{color: '#19a86fff', textAlign: 'center'}}>Средний доход</Text>
-                <Text>{calcIncome.average} руб.</Text>
-              </Flex>
-              <Flex vertical align="center">
-                <Text strong style={{color: '#19a86fff', textAlign: 'center'}}>Макс. доход</Text>
-                <Text>{calcIncome.max} руб.</Text>
-              </Flex>
-            </Flex> 
-            <Flex justify="space-between" gap={5} className={styles.statistic}>
-              <Flex vertical align="center">
-                <Text strong style={{color: '#6395FA', textAlign: 'center'}}>Мин. расход</Text>
-                <Text>{calcExpense.min} руб.</Text>
-              </Flex>
-              <Flex vertical align="center">
-                <Text strong style={{color: '#6395FA', textAlign: 'center'}}>Средний расход</Text>
-                <Text>{calcExpense.average} руб.</Text>
-              </Flex>
-              <Flex vertical align="center">
-                <Text strong style={{color: '#6395FA', textAlign: 'center'}}>Макс. расход</Text>
-                <Text>{calcExpense.max} руб.</Text>
-              </Flex>
-            </Flex> 
+            <AnaliticCalc/>
             <AnaliticChart/>
             <Audit/> 
           </Col>

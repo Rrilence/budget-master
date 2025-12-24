@@ -10,7 +10,7 @@ import BudgetSegment from "../../../entities/Budget/ui/BudgetSegment";
 import budget from '../../../assets/budget.png'
 import BudgetList from "../../../entities/Budget/ui/BudgetsList";
 import { Content } from "antd/es/layout/layout";
-import { selectTheme } from "../../../entities/Theme/theme-slice";
+import { selectTheme } from "../../../entities/setting-slice";
 import clsx from "clsx";
 import { useEffect } from "react";
 import { selectUser } from "../../../entities/auth-slice";

@@ -3,12 +3,14 @@ import { selectfinAudit } from "./analitic-slice";
 import { Flex, Typography } from "antd";
 import dayjs from 'dayjs';
 import { CheckCircleOutlined, CloseCircleOutlined, DollarOutlined, EditOutlined, LineChartOutlined } from "@ant-design/icons";
+import useCurrency from "../../shared/hooks/useCurrency";
 
 const {Text} = Typography;
 
 const Audit = () => {
 
     const finAudit = useSelector(selectfinAudit);
+    const {symbolCurrency} = useCurrency();
 
     const monthProfit = finAudit
         .filter(item => item.Прибыль > 0)
@@ -28,13 +30,13 @@ const Audit = () => {
             {totalProfit >= 0 
             ?
             <Flex vertical gap={10}>
-                <Text><DollarOutlined style={{color: '#d2b512ff'}}/> Текущая прибыль: <b>{totalProfit} руб.</b></Text>
+                <Text><DollarOutlined style={{color: '#d2b512ff'}}/> Текущая прибыль: <b>{totalProfit} {symbolCurrency}</b></Text>
                 <Text><EditOutlined style={{color: '#850e3aff'}}/> Общая тенденция: положительная</Text>
                 <Text><b>Рекомендация:</b> проанализировать факторы успеха в указанные периоды для повторения и улучшения результата."</Text>
             </Flex>
             : 
             <Flex vertical gap={10}>
-                <Text><DollarOutlined style={{color: '#d2b512ff'}}/> Текущий убыток: <b>{totalProfit} руб.</b></Text>
+                <Text><DollarOutlined style={{color: '#d2b512ff'}}/> Текущий убыток: <b>{totalProfit} {symbolCurrency}</b></Text>
                 <Text><EditOutlined style={{color: '#850e3aff'}}/> Общая тенденция: <b>отрицательная</b></Text>
                 <Text><b>Рекомендация:</b> проанализировать факторы неудачи в указанные периоды и по возможности уменьшить расходы по самым убыточным категориям</Text>
             </Flex>

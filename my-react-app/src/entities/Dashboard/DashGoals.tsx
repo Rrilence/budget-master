@@ -40,7 +40,7 @@ const DashGoals = () => {
                 {goals.map((goal) => {
                     const iconColor = goal.icon ? colorMap[goal.icon] || "rgba(24, 237, 245, 0.98)" : null;
                     return (
-                        <Flex vertical align="center" gap={10}>
+                        <Flex vertical align="center" gap={10} key={goal.id}>
                             <Progress 
                             type="circle"
                             size={80}

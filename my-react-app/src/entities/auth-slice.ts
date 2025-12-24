@@ -3,7 +3,6 @@ import type { AuthState } from "../shared/types";
 import type { AppDispatch, RootState } from "../app/store";
 import { supabase } from "./lib/supabase";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 
 
 const initialState: AuthState = {

@@ -9,7 +9,7 @@ import { useCallback, useState } from "react";
 import type { MenuInfo } from "rc-menu/lib/interface";
 import { deleteGoals } from "../api/deleteGoal";
 import dayjs from 'dayjs';
-import { formatAmount } from "../../../shared/formatting";
+import useCurrency from "../../../shared/hooks/useCurrency";
 
 const {Text} = Typography;
 
@@ -19,6 +19,8 @@ const GoalsList = () => {
     const goals = useSelector(selectGoals);
     const [openGoalId, setOpenGoalId] = useState<string | null>(null);
     const [isPredict, setIsPredict] = useState<Record<string, boolean>>({});
+
+    const {formatAmount} = useCurrency();
 
     const togglePrediction = (goalId: string) => {
         setIsPredict(prev => ({

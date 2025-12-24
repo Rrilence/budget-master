@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { selectTheme } from "../../../entities/Theme/theme-slice";
+import { selectTheme } from "../../../entities/setting-slice";
 import { Content } from "antd/es/layout/layout";
 import { selectIsOpenModal, setGoals, setIsOpenModal } from "../../../entities/Goals/goals-slice";
 import { Button, Flex } from "antd";

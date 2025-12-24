@@ -11,8 +11,8 @@ import type { MenuInfo } from "rc-menu/lib/interface";
 import type { InfoBudget } from "../../../shared/types";
 import BudgetDescription from "./BudgetDescription";
 import dayjs from 'dayjs';
-import useBudget from "../../../shared/useBudget";
-import { formatAmount } from "../../../shared/formatting";
+import useBudget from "../../../shared/hooks/useBudget";
+import useCurrency from "../../../shared/hooks/useCurrency";
 
 const BudgetList = () => {
 
@@ -26,6 +26,7 @@ const BudgetList = () => {
     const [openBudgetId, setOpenBudgetId] = useState<string | null>(null);
 
     const expensesByCategory = useBudget(budgets, expenses);
+    const {formatAmount} = useCurrency();
 
     const handleMenuClick: (info: MenuInfo, budget: InfoBudget) => void = (info, budget) => {
         if(info.key === '1') {

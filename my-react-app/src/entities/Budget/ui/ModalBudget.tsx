@@ -11,6 +11,7 @@ import { createBudget, defaultState } from "../api/createBudget";
 import { updateBudgets } from "../api/updateBudget";
 import { notifyErrorBudget } from "../../../shared/toasts";
 import { formatWeek } from "../../../shared/formatting";
+import useCurrency from "../../../shared/hooks/useCurrency";
 
 const { TextArea } = Input;
 
@@ -27,6 +28,8 @@ const ModalBudget = () => {
     const period = useSelector(selectInitialPeriod);
     const initialValues = useSelector(selectInitialValues);
     const user = useSelector(selectUser);
+
+    const {symbolCurrency} = useCurrency();
 
     const [state, submitAction, isPending] = useActionState(async (prevState: InfoBudget | undefined, values: InfoBudget) => {
         if (!user) {
@@ -196,7 +199,7 @@ const ModalBudget = () => {
                 <Form.Item 
                 name="amount" 
                 layout="vertical"
-                label="Лимит, руб: " 
+                label={`Лимит, ${symbolCurrency}: `} 
                 rules={[
                     { required: true, message: 'Введите сумму' },
                     { type: 'number', min: 0.01, message: 'Сумма должна быть больше 0' },

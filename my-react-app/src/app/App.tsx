@@ -4,14 +4,16 @@ import ErrorBoudary from "../widgets/errorBoundary/ErrorBoundary"
 import { BrowserRouter } from "react-router-dom"
 import { getCurrentUser, selectLoading, setUser, useAppDispatch } from "../entities/auth-slice"
 import { useSelector } from "react-redux"
-import { useEffect } from "react"
+import { useEffect, useRef } from "react"
 import { supabase } from "../entities/lib/supabase"
 import AntProvider from "./ConfigProvider"
 import { Flex, Spin } from "antd"
+import { fetchSettings } from "../entities/setting-slice"
 
 
 function App() {
   const dispatch = useAppDispatch();
+  const hasFetchedRef = useRef(false);
   const loading = useSelector(selectLoading);
 
   useEffect(() => {
@@ -20,7 +22,11 @@ function App() {
       const { data : authListener } = supabase.auth.onAuthStateChange(
         async (_, session) => {
             if(session?.user) {
-                dispatch(setUser(session.user))                
+                dispatch(setUser(session.user))  
+                if (!hasFetchedRef.current) {
+                  hasFetchedRef.current = true;
+                  dispatch(fetchSettings());
+                }              
             } else {
               dispatch(setUser(null))
             }

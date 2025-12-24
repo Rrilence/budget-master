@@ -1,6 +1,6 @@
 import { ConfigProvider, theme} from "antd";
 import { useSelector } from "react-redux";
-import { selectTheme } from "../entities/Theme/theme-slice";
+import { selectTheme } from "../entities/setting-slice";
 import locale from 'antd/locale/ru_RU';
 import dayjs from 'dayjs';
 
@@ -45,6 +45,12 @@ const AntProvider = ({children}: AntProps) => {
                     Typography: {
                     colorTextHeading: "#030852",
                     },
+                    Radio: {
+                    colorPrimary: "rgba(55, 34, 125, 1)"
+                    },
+                    Checkbox: {
+                    colorPrimary: "rgba(55, 34, 125, 1)"
+                    }
                 },
                 algorithm: (isTheme === 'light' ? defaultAlgorithm : darkAlgorithm)
                 }}

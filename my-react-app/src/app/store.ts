@@ -1,5 +1,4 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { themeReducer } from "../entities/Theme/theme-slice";
 import { authReducer } from "../entities/auth-slice";
 import { sidebarReducer } from "../entities/Sidebar/sidebar-slice";
 import { headerMenuReducer } from "../entities/headerMenu-slice";
@@ -9,11 +8,12 @@ import { budgetsReducer } from "../entities/Budget/budget-slice";
 import { windowReducer } from "../entities/windoWidth-slice";
 import { analiticReducer } from "../entities/Analitic/analitic-slice";
 import { goalsReducer } from "../entities/Goals/goals-slice";
+import { settingReducer } from "../entities/setting-slice";
 
 
 export const store = configureStore({
     reducer: {
-        theme: themeReducer,
+        setting: settingReducer,
         auth: authReducer,
         window: windowReducer,
         sidebar: sidebarReducer,

@@ -1,7 +1,7 @@
 import clsx from "clsx"
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom"
-import { selectTheme } from "../Theme/theme-slice";
+import { selectTheme } from "../setting-slice";
 import { ThemeSwitcher } from "../Theme/ThemeSwither";
 
 import styles from './styles.module.css'

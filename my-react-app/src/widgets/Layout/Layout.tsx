@@ -1,10 +1,9 @@
 import { Outlet } from "react-router-dom"
 import clsx from "clsx"
 import styles from './styles.module.css'
-
 import logo from '../../assets/logo.png'
 import { useDispatch, useSelector } from "react-redux"
-import { selectTheme } from "../../entities/Theme/theme-slice"
+import { selectData, selectTheme } from "../../entities/setting-slice"
 import { useEffect, useState } from "react"
 import Sidebar from "../../entities/Sidebar/Sidebar"
 import { Layout, Menu, type MenuProps } from 'antd';
@@ -19,6 +18,7 @@ import type { RootState } from "../../app/store"
 import DateCalendar from "../DateCalendar/DateCalendar"
 import { selectWindowWidth, setWindowWidth } from "../../entities/windoWidth-slice"
 
+type MenuInfo = Parameters<NonNullable<MenuProps['onClick']>>[0];
 const { Header, Content, Sider } = Layout;
 
 const LayoutWidget = () => {
@@ -29,43 +29,63 @@ const LayoutWidget = () => {
     const isWeather = useSelector(selectIsWeather);
     const isExchange = useSelector(selectIsExchange);
     const isMain = useSelector(selectIsMain);
+    const settings = useSelector(selectData);
     const {lat, lng, locationError, available, enable} = useLocation();
     const dispatchExtra:  ThunkDispatch<RootState, undefined, PayloadAction> = useDispatch();
     const WeatherDate = useSelector(selectNowWeather);
     const ExchangeDate = useSelector(selectNowExchange);
     const nowWeather = WeatherDate.data.name + ' ' + WeatherDate.data.temp + '°';
-    const ExchangeUSD = ExchangeDate.data.find((item) => item.CharCode === 'USD');
-    const ExchangeEUR = ExchangeDate.data.find((item) => item.CharCode === 'EUR');
-    const nowExchangeUSD = ExchangeUSD?.CharCode + ' ' + Number(ExchangeUSD?.Value).toFixed(2);
-    const nowExchangeEUR = ExchangeEUR?.CharCode + ' ' + Number(ExchangeEUR?.Value).toFixed(2);
-    
+
+    const exchangeRate = () => {
+        const ExchangeUSD = ExchangeDate.data.find((item) => item.CharCode === 'USD');
+        const ExchangeEUR = ExchangeDate.data.find((item) => item.CharCode === 'EUR');
+        if(settings.currency === 'USD') {
+            if(ExchangeUSD && ExchangeEUR)
+            return {
+                exchangeOne: 'RUB' + ' ' + (ExchangeUSD?.Value / 100).toFixed(2),
+                exchangeTwo: ExchangeEUR?.CharCode + ' ' +(ExchangeUSD?.Value / ExchangeEUR?.Value).toFixed(2)
+            }
+            }
+        else if(settings.currency === 'EUR') {
+            if(ExchangeUSD && ExchangeEUR)
+            return {
+                exchangeOne: 'RUB' + ' ' + (ExchangeEUR?.Value / 100).toFixed(2),
+                exchangeTwo: ExchangeUSD?.CharCode + ' ' +(ExchangeEUR?.Value / ExchangeUSD?.Value).toFixed(2)
+            }
+        }
+        return {
+            exchangeOne: ExchangeUSD?.CharCode + ' ' + ExchangeUSD?.Value.toFixed(2),
+            exchangeTwo: ExchangeEUR?.CharCode + ' ' + ExchangeEUR?.Value.toFixed(2)
+        }
+    }
+
     const items: MenuProps['items'] = [
         {
-            label: <div>
-                {formatDateWeather(new Date())}
-            </div>,
-            key: 'Дата',
-            onClick: (e) => dispatch(setActive(e.key))
+        label: <div>
+            {formatDateWeather(new Date())}
+        </div>,
+        key: 'Дата',
+        onClick: (info: MenuInfo) => dispatch(setActive(info.key))
         },
-        {
-            label: <div>
-                <img className={styles.imgWeather}
-                    src={`https://openweathermap.org/img/wn/${WeatherDate.data.icon}@2x.png`} alt=""/>
-                    <br />
-                {nowWeather}
-            </div>,
-            key: 'Погода',
-            onClick: (e) => dispatch(setActive(e.key))
+        settings.weather && {
+        label: <div>
+            <img className={styles.imgWeather}
+                src={`https://openweathermap.org/img/wn/${WeatherDate.data.icon}@2x.png`} alt=""/>
+                <br />
+            {nowWeather}
+        </div>,
+        key: 'Погода',
+        onClick: (info: MenuInfo) => dispatch(setActive(info.key))
         },
-        {
-            label: <div>
-                {nowExchangeUSD} <br />
-                {nowExchangeEUR}
-            </div>,
-            key: 'Курс Валют',
-            onClick: (e) => dispatch(setActive(e.key))
+        settings.exchangeRate && {
+        label: <div>
+            {exchangeRate().exchangeOne} <br />
+            {exchangeRate().exchangeTwo}
+        </div>,
+        key: 'Курс Валют',
+        onClick: (info: MenuInfo) => dispatch(setActive(info.key))
         }
-    ]
+    ].filter(Boolean) as MenuProps['items'];
     
     const [isShowMenu, setIsShowMenu] = useState(typeof window !== 'undefined' ? window.innerWidth >= 768 : true);
 
@@ -84,13 +104,16 @@ const LayoutWidget = () => {
     }, [windowWidth])
 
     useEffect(() => {
-        if(lat && lng) {
-            // dispatchExtra(fetchWeather({lat, lng}));
-        } else if(locationError) {
-            console.error('Ошибка определения местоположения', locationError?.message);
+        if(settings.weather) {
+            if(lat && lng) {
+                // dispatchExtra(fetchWeather({lat, lng}));
+            } else if(locationError) {
+                console.error('Ошибка определения местоположения', locationError?.message);
+            }
         }
+        if(settings.exchangeRate)
         dispatchExtra(fetchExchange());
-    }, [lat, lng, locationError, dispatchExtra])
+    }, [lat, lng, locationError, dispatchExtra, settings.exchangeRate, settings.weather])
 
 
     return (

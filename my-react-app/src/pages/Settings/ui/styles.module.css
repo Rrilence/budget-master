@@ -1,0 +1,38 @@
+.wrapper {
+    padding: 30px;
+    min-height: 620px;
+}
+
+.title {
+    font-size: 17px;
+}
+
+.flex {
+    flex-direction: column;
+    width: 250px;
+    justify-content: start;
+}
+
+.checkbox {
+    flex-direction: row-reverse;
+    width: 250px;
+    justify-content: space-between;
+}
+
+.checkgroup {
+    flex-direction: column;
+}
+
+.icon {
+    font-size: 20px;
+    margin-right: 5px;
+}
+
+@media (min-width: 720px) {
+    .flex {
+        flex-direction: row;
+        justify-content: space-between;
+        width: 400px;
+    }
+
+ }

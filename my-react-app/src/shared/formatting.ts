@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import isoWeek from 'dayjs/plugin/isoWeek';
+import { useSelector } from 'react-redux';
 
 dayjs.extend(isoWeek);
 
@@ -61,14 +62,6 @@ const formatWeek = (dateWeek: string) => {
     return monday
 }
 
-const formatAmount = (number: number) => {
-  return new Intl.NumberFormat('ru-RU', {
-    style: 'decimal',
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(number) + ' руб.';
-};
-
 const getCategoryColor = (category: string): string => {
   const colorMap: Record<string, string> = {
     'Дом': '#cc1616ff',
@@ -96,7 +89,6 @@ export {
     formatTimeWeather,
     formatDateExchange,
     formatDate,
-    formatWeek,
-    formatAmount, 
+    formatWeek, 
     getCategoryColor,
 }

@@ -9,7 +9,8 @@ import type { InfoCourse } from "../../../shared/types";
 import style from './styles.module.css'
 import type { TableProps } from "antd/lib";
 import { useStyles } from "../hooks/useStyles";
-import clsx from "clsx";
+import { useSelector } from "react-redux";
+import { selectData } from "../../../entities/setting-slice";
 
 
 const Exchange = () => {
@@ -18,15 +19,32 @@ const Exchange = () => {
   const [searchText, setSearchText] = useState('');
   const [searchedColumn, setSearchedColumn] = useState('');
   const searchInput = useRef<InputRef>(null);
+  const settings = useSelector(selectData);
 
-  const [courseState, dispatch] = useActionState(submitCourse, defaultExchange)
+  const [courseState, dispatch] = useActionState(submitCourse, defaultExchange);
+
+  const formatCurrency = (value: number) => {
+    if(settings.currency === 'USD') {
+      const USD = courseState.data.find((item) => item.CharCode === 'USD');
+      if (USD && USD.Value) {
+      return Number((USD.Value / value).toFixed(4));
+      }
+    }
+    else if(settings.currency === 'EUR') {
+      const EUR = courseState.data.find((item) => item.CharCode === 'EUR');
+      if (EUR && EUR.Value) {
+      return Number((EUR.Value / value).toFixed(4));
+      }
+    }
+    return value;
+  }
     
   const dataSource = courseState.data.map((item) => (
     {
       key: item.ID,
       code: item.CharCode,
       name: item.Name,
-      value: item.Value,
+      value: formatCurrency(item.Value),
     }
   ))
 

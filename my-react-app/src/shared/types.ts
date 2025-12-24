@@ -214,3 +214,14 @@ export interface AnaliticState {
   finAudit: InfoProfit[],
   dash: InfoDash[],
 }
+
+export type ThemeState = 'light' | 'dark';
+
+export interface Settings {
+  currency: 'RUB' | 'USD' | 'EUR',
+  theme: ThemeState,
+  category: string[],
+  notifications: boolean,
+  exchangeRate: boolean,
+  weather: boolean,
+}

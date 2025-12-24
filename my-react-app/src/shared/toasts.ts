@@ -232,6 +232,25 @@ const notifyTransaction = () => {
     })
 } 
 
+const notifySettings = () => {
+    toast.success('Настройки успешно применены', {
+        toastId: '003',
+        position: "top-right",
+        autoClose: 1500,
+        closeOnClick: true,
+        theme: "light",
+    })
+} 
+const notifyErrorSettings = () => {
+    toast.error('Настройки не удалось применить', {
+        toastId: '003',
+        position: "top-right",
+        autoClose: 1500,
+        closeOnClick: true,
+        theme: "light",
+    })
+} 
+
 const notifySaving = () => {
     toast.success('Сумма накоплений изменена', {
         toastId: '003',
@@ -254,6 +273,15 @@ const notifyErrorSaving = () => {
 
 const notifyErrorBudget = () => {
     toast.error('Бюджет с такой категорией и периодом уже существует', {
+        toastId: '003',
+        position: "top-right",
+        autoClose: 1500,
+        closeOnClick: true,
+        theme: "light",
+    })
+} 
+const notifySelectCategory = () => {
+    toast.warn('Должна быть выбрана хотя бы одна категория', {
         toastId: '003',
         position: "top-right",
         autoClose: 1500,
@@ -289,4 +317,7 @@ export {
     notifyErrorSaving,
     notifySaving,
     notifyUpdateGoal,
+    notifySettings,
+    notifyErrorSettings,
+    notifySelectCategory,
 }
