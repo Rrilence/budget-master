@@ -48,24 +48,24 @@ const Transactions = () => {
     }, [])
 
     return (
-            <Flex vertical className={styles.container}>
-                <Segmented<string>
-                    options={['Расходы', 'Доходы']}
-                    onChange={(value) => dispatch(setTransactions(value))}
-                    block
-                    className={styles.title}
-                />
-                {transactions === "Расходы" && <ExpensesList/>}
-                {transactions === "Доходы" && <IncomesList/>}
-                <FloatButton 
-                type="primary"
-                icon={<PlusOutlined />} 
-                onClick={showModal}
-                />
-                {isOpenModal && transactions === 'Расходы' && <ModalExpenses/>}
-                {isOpenModal && transactions === 'Доходы' && <ModalIncomes/>}
-            </Flex>
-    )
+        <Flex vertical className={styles.container}>
+            <Segmented<string>
+                options={['Расходы', 'Доходы']}
+                onChange={(value) => dispatch(setTransactions(value))}
+                block
+                className={styles.title}
+            />
+            {transactions === "Расходы" && <ExpensesList/>}
+            {transactions === "Доходы" && <IncomesList/>}
+            <FloatButton 
+            type="primary"
+            icon={<PlusOutlined />} 
+            onClick={showModal}
+            />
+            {isOpenModal && transactions === 'Расходы' && <ModalExpenses/>}
+            {isOpenModal && transactions === 'Доходы' && <ModalIncomes/>}
+        </Flex>
+)
 }
 
 export default Transactions

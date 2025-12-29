@@ -13,9 +13,11 @@ import Audit from "../../../entities/Analitic/Audit";
 import AnaliticChart from "../../../entities/Analitic/AnaliticChart";
 import { selectTheme } from "../../../entities/setting-slice";
 import { AnaliticCalc } from "../../../entities/Analitic/AnaliticCalc";
+import { useWindowSize } from "../../../shared/hooks/useWindowSize";
 
 const Analytics = () => {
 
+  useWindowSize();
   const dispatch = useDispatch();
   const windowWidth = useSelector(selectWindowWidth);
   const user = useSelector(selectUser);
@@ -39,52 +41,41 @@ const Analytics = () => {
   }, [dispatch, user]); 
 
   useEffect(() => {
-          const handleResize = () => {
-            dispatch(setWindowWidth(window.innerWidth));
-          };
-          window.addEventListener('resize', handleResize);
-          return () => {
-            window.removeEventListener('resize', handleResize);
-          };
-        }, [dispatch]);
-  
-      useEffect(() => {
-          setIsDesktop(windowWidth >= 1050);
-      }, [windowWidth])
+    setIsDesktop(windowWidth >= 1050);
+  }, [windowWidth])
 
-  
-    return (
-      <>
-      { isDesktop ? (
-        <Row align="stretch" className={`${theme === 'light' ? 'light' : 'dark'}`}>
-          <Col span={12} style={{padding: '20px'}}>
-          <div style={{height: '500px'}}>
-            <DualChart />   
-          </div>
-          <AnaliticCalc/>
-          </Col>
-          <Col span={12} style={{padding: '70px 20px'}}>  
-            <div style={{height: '531px'}}>
-              <AnaliticChart/>
-            </div>
-          </Col>
-          <Col span={24}>
-            <Audit/> 
-          </Col>
-        </Row> 
-        ) : (
-        <Row justify="center" className={`${theme === 'light' ? 'light' : 'dark'}`}>
-          <Col span={24}>
-            <DualChart/>
-            <AnaliticCalc/>
+  return (
+    <>
+    { isDesktop ? (
+      <Row align="stretch" className={`${theme === 'light' ? 'light' : 'dark'}`}>
+        <Col span={12} style={{padding: '20px'}}>
+        <div style={{height: '500px'}}>
+          <DualChart />   
+        </div>
+        <AnaliticCalc/>
+        </Col>
+        <Col span={12} style={{padding: '70px 20px'}}>  
+          <div style={{height: '531px'}}>
             <AnaliticChart/>
-            <Audit/> 
-          </Col>
-        </Row>
-        )
-      }
-      </>
-    )
+          </div>
+        </Col>
+        <Col span={24}>
+          <Audit/> 
+        </Col>
+      </Row> 
+      ) : (
+      <Row justify="center" className={`${theme === 'light' ? 'light' : 'dark'}`}>
+        <Col span={24}>
+          <DualChart/>
+          <AnaliticCalc/>
+          <AnaliticChart/>
+          <Audit/> 
+        </Col>
+      </Row>
+      )
+    }
+    </>
+  )
 }
 
 export default Analytics

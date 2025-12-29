@@ -1,23 +1,16 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import type { InfoDash } from "../../shared/types";
 import { useSelector } from "react-redux";
 import { selectExpenses } from "../Expenses/expenses-slice";
 import { Column } from "@ant-design/plots";
-import { selectData, selectTheme } from "../setting-slice";
+import { selectTheme } from "../setting-slice";
 import {getCategoryColor } from "../../shared/formatting";
 import useCurrency from "../../shared/hooks/useCurrency";
-
+import useCategory from "../../shared/hooks/useCategory";
 
 const AnaliticChart = () => {
 
-  const setting = useSelector(selectData)
-
-  const initialDash = useMemo(() => {
-    return (setting?.category || []).map(category => ({
-      type: category,
-      value: 0
-    }));
-  }, [setting?.category]);
+  const initialDash = useCategory();
 
   const [data, setData] = useState<InfoDash[]>(initialDash);
   const expenses = useSelector(selectExpenses);

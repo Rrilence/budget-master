@@ -1,13 +1,14 @@
 import { Pie } from "@ant-design/plots";
 import { useDispatch, useSelector } from "react-redux";
 import { selectExpenses } from "../Expenses/expenses-slice";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { getCategoryColor } from "../../shared/formatting";
-import { selectData, selectTheme } from "../setting-slice";
+import { selectTheme } from "../setting-slice";
 import { selectWindowWidth, setWindowWidth } from "../windoWidth-slice";
 import type { InfoDash } from "../../shared/types";
 import { Typography } from "antd";
 import useCurrency from "../../shared/hooks/useCurrency";
+import useCategory from "../../shared/hooks/useCategory";
 
 const { Text } = Typography;
 
@@ -17,14 +18,7 @@ interface DashProps {
 
 const DashChart = ({sumExpenses}: DashProps) => {
 
-  const setting = useSelector(selectData);
-  
-  const initialDash = useMemo(() => {
-    return (setting?.category || []).map(category => ({
-      type: category,
-      value: 0
-    }));
-  }, [setting?.category]);
+  const initialDash = useCategory();
     
   const dispatch = useDispatch(); 
   const expenses = useSelector(selectExpenses);

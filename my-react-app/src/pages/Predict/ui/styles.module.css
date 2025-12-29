@@ -1,0 +1,9 @@
+.alert {
+    height: 600px;
+    padding-top: 60px;
+}
+
+.balance {
+    position: absolute;
+    text-align: center;
+}

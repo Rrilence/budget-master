@@ -12,7 +12,7 @@ import styles from './styles.module.css'
 import clsx from "clsx";
 import DashChart from "../../../entities/Dashboard/DashChart";
 import ExpenseIncome from "../../../entities/Dashboard/ExpenseIncome/ExpenseIncome";
-import { selectWindowWidth, setWindowWidth } from "../../../entities/windoWidth-slice";
+import { selectWindowWidth } from "../../../entities/windoWidth-slice";
 import DashTransactions from "../../../entities/Dashboard/DashTransactions";
 import { BellOutlined } from "@ant-design/icons";
 import { selectBudgets, setBudgets } from "../../../entities/Budget/budget-slice";
@@ -23,6 +23,7 @@ import { getGoals } from "../../../entities/Goals/api/getGoals";
 import { selectGoals, setGoals } from "../../../entities/Goals/goals-slice";
 import dayjs from 'dayjs';
 import useCurrency from "../../../shared/hooks/useCurrency";
+import { useWindowSize } from "../../../shared/hooks/useWindowSize";
 
 const {Text} = Typography
 
@@ -32,6 +33,7 @@ type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
 const DashBoard = () => {
 
+    useWindowSize();
     const [api, contextHolder] = notification.useNotification()
     const dispatch = useDispatch();
     const expenses = useSelector(selectExpenses);
@@ -133,27 +135,16 @@ const DashBoard = () => {
         dedline,
         overdue,
     };
-}, [expenses, incomes, budgets, expensesByCategory, goals]);
-
-useEffect(() => {
-    setExpense(financialData.expense);
-    setIncome(financialData.income);
-    setBalance(financialData.balance);
-    setExceedBudget(financialData.exceedBudget);
-    setOverdueGoals(financialData.overdue);
-    setDedlineGoals(financialData.dedline);
-}, [financialData]);
-
+    }, [expenses, incomes, budgets, expensesByCategory, goals]);
 
     useEffect(() => {
-        const handleResize = () => {
-          dispatch(setWindowWidth(window.innerWidth));
-        };
-        window.addEventListener('resize', handleResize);
-        return () => {
-          window.removeEventListener('resize', handleResize);
-        };
-      }, [dispatch]);
+        setExpense(financialData.expense);
+        setIncome(financialData.income);
+        setBalance(financialData.balance);
+        setExceedBudget(financialData.exceedBudget);
+        setOverdueGoals(financialData.overdue);
+        setDedlineGoals(financialData.dedline);
+    }, [financialData]);
 
     useEffect(() => {
         setIsDesktop(windowWidth >= 1050);

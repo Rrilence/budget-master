@@ -1,0 +1,45 @@
+
+.title {
+    text-transform: uppercase;
+    font-size: 17px;
+}
+
+.scenario {
+    font-size: 16px;
+    text-align: center;
+}
+
+.segmented {
+    font-weight: bold;
+    padding: 5px;
+    background-color: rgb(4, 70, 108);
+    border-radius: 0;
+    width: 100%;
+    max-width: 350px;
+}
+
+.form {
+    width: 100%;
+    max-width: 350px;
+    margin: 5px auto;
+    border: 5px solid rgb(4, 70, 108);
+    border-radius: 10px;
+}
+
+.credit {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: space-between;
+}
+
+.result{
+    display: inline-block;
+    text-align: center;
+    width: 100%;
+}
+
+.calc {
+    width: 450px;
+    margin: 20px auto;
+}

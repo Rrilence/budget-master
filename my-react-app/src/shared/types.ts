@@ -210,6 +210,13 @@ export interface InfoDash {
   value: number,
 }
 
+export interface InfoLoan {
+  amount: number,
+  procent: number,
+  time: number,
+  initial?: number,
+}
+
 export interface AnaliticState {
   finAudit: InfoProfit[],
   dash: InfoDash[],
