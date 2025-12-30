@@ -16,7 +16,7 @@ import clsx from "clsx";
 import styles from './styles.module.css'
 import { FileExcelOutlined } from "@ant-design/icons";
 import Stadiumpredict from "../../../entities/Predict/Stadiumpredict";
-import CreditCalc from "../../../entities/Predict/creditCalc";
+import CreditCalc from "../../../entities/Predict/CreditCalc";
 import { usePredict } from "../../../shared/hooks/usePredict";
 import useCurrency from "../../../shared/hooks/useCurrency";
 import circle from '../../../assets/circle.jpg'

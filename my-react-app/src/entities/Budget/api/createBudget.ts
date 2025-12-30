@@ -3,7 +3,6 @@ import type { InfoBudget } from "../../../shared/types";
 import { supabase } from "../../lib/supabase";
 import { notifyCreateBudget, notifyCreateErrorBudget } from "../../../shared/toasts";
 import dayjs from 'dayjs';
-import { LineHeightOutlined } from "@ant-design/icons";
 
 export const defaultState: InfoBudget = {
     user_id: null,

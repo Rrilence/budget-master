@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { selectData, selectTheme } from "../../entities/setting-slice"
 import { useEffect, useState } from "react"
 import Sidebar from "../../entities/Sidebar/Sidebar"
-import { Flex, Layout, Menu, type MenuProps } from 'antd';
+import { Layout, Menu, type MenuProps } from 'antd';
 import { MenuOutlined } from "@ant-design/icons"
 import { fetchExchange, fetchWeather, selectIsDate, selectIsExchange, selectIsMain, selectIsWeather, selectNowExchange, selectNowWeather, setActive } from "../../entities/headerMenu-slice"
 import Weather from "../Weather/ui/Weather"
@@ -106,7 +106,7 @@ const LayoutWidget = () => {
     useEffect(() => {
         if(settings.weather) {
             if(lat && lng) {
-                // dispatchExtra(fetchWeather({lat, lng}));
+                dispatchExtra(fetchWeather({lat, lng}));
             } else if(locationError) {
                 console.error('Ошибка определения местоположения', locationError?.message);
             }

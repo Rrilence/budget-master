@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { getExpenses } from "../../../entities/Expenses/api/getExpenses";
 import { getIncomes } from "../../../entities/Incomes/api/getIncomes";
 import { notifyError } from "../../../shared/toasts";
-import { selectWindowWidth, setWindowWidth } from "../../../entities/windoWidth-slice";
+import { selectWindowWidth} from "../../../entities/windoWidth-slice";
 import { Col, Row } from "antd";
 import Audit from "../../../entities/Analitic/Audit";
 import AnaliticChart from "../../../entities/Analitic/AnaliticChart";

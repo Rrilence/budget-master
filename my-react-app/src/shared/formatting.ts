@@ -1,6 +1,5 @@
 import dayjs from 'dayjs';
 import isoWeek from 'dayjs/plugin/isoWeek';
-import { useSelector } from 'react-redux';
 
 dayjs.extend(isoWeek);
 

@@ -30,8 +30,8 @@ const AntProvider = ({children}: AntProps) => {
                     Button: {
                     contentFontSize: 16,
                     paddingInline: 4,
-                    defaultColor: "rgb(6,17,120)",
-                    defaultBorderColor: "rgb(6,17,120)",
+                    defaultColor: "rgba(69, 82, 201, 1)",
+                    defaultBorderColor: "rgba(69, 82, 201, 1)",
                     textTextActiveColor: "rgb(37,19,195)",
                     textTextHoverColor: "rgb(238,240,251)",
                     colorBgTextActive: "rgba(255,255,255,0.62)"
